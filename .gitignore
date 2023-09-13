@@ -1,0 +1,17 @@
+listing/
+output/
+RTE/
+*.uvgui.*
+*.uvguix.*
+*.uvoptx
+*.dep
+*.scvd
+ll_noos/
+homekit-bulb/
+mesh-sensor-light/
+peripheral_dirfinding/
+ble_rpc_delete/
+dual_i2c/
+music_player/
+mesh_prov/
+direct_conn/
