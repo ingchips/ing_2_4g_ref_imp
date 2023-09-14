@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,DEF_MASTER=0</Define>
               <Undefine></Undefine>
-              <IncludePath>./2P4G/registers;../../bundles/extension/inc;../../bundles/extension/inc/os;../../src/BSP;../../src/FWlib;../../src/StartUP/ing916;../../src/Tools;../../src</IncludePath>
+              <IncludePath>./2P4G/;../../bundles/extension/inc;../../bundles/extension/inc/os;../../src/BSP;../../src/FWlib;../../src/StartUP/ing916;../../src/Tools;../../src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -392,6 +392,11 @@
               <FileName>profile.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\profile.c</FilePath>
+            </File>
+            <File>
+              <FileName>TEST_2P4G.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\TEST_2P4G.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -564,5 +569,14 @@
     </components>
     <files/>
   </RTE>
+
+  <LayerInfo>
+    <Layers>
+      <Layer>
+        <LayName>BLE_2P4G_Switch</LayName>
+        <LayPrjMark>1</LayPrjMark>
+      </Layer>
+    </Layers>
+  </LayerInfo>
 
 </Project>

@@ -3,6 +3,12 @@
 #define ING__2P4G__H
 #include "stdint.h"
 
+typedef enum
+{
+    MODE_BLE,
+    MODE_2G4,
+} comm_mode_t;
+
 #define MODE_MASTER  0x0
 #define MODE_SLAVE   0x1
 
@@ -34,23 +40,23 @@ typedef enum
 
 typedef struct
 {
-  uint8_t   Mode;         //Master or Slave
-  uint32_t  AccAddr;      //Access Address
-  uint8_t   PHY;          //PHY, 0:1M, 1:2M, 2:Coded S2, 3:Coded S8
-  uint16_t  Channel;      //Channel, exp:2402
-  uint8_t   TXPOW;        //Tx power idx, 0~63
-  uint8_t   WhiteEn;      //white enable, 0 or 1
-  uint8_t   WhiteIdx;     //white index, 0~39
-  uint32_t  CRCInit;      //CRC initial value, 3Bytes
-  uint32_t  TimeOut;      //Slave rx timeout, 14Bits, Unit 625us
-  uint8_t   RxPktIntEn;   //Rx packet intterupt enable
-  uint8_t   RxPktIntThres;//Rx packet intterupt threshold
-} ING2P4G_Config_S;
+    uint8_t   Mode;         //Master or Slave
+    uint32_t  AccAddr;      //Access Address
+    uint8_t   PHY;          //PHY, 0:1M, 1:2M, 2:Coded S2, 3:Coded S8
+    uint16_t  Channel;      //Channel, exp:2402
+    uint8_t   TXPOW;        //Tx power idx, 0~63
+    uint8_t   WhiteEn;      //white enable, 0 or 1
+    uint8_t   WhiteIdx;     //white index, 0~39
+    uint32_t  CRCInit;      //CRC initial value, 3Bytes
+    uint32_t  TimeOut;      //Slave rx timeout, 14Bits, Unit 625us
+    uint8_t   RxPktIntEn;   //Rx packet intterupt enable
+    uint8_t   RxPktIntThres;//Rx packet intterupt threshold
+} ING2P4G_Config_t;
 
 typedef struct
 {
-  uint8_t   DataLen;    //Data length
-  uint8_t   Data[256];       //Data Pointer
+    uint8_t   DataLen;        //Data length
+    uint8_t   Data[256];      //Data Pointer
 } ING2P4G_RxPacket;
 
 typedef void (*f_ing2p4g_cb)(void);
@@ -71,6 +77,7 @@ void ing2p4g_set_irq_callback(ing2p4g_callback_type_t type, f_ing2p4g_cb f);
  ****************************************************************************************
  */
 void clear_rx_int(void);
+void ing2p4g_clear_rx_int(void);
 
 /**
  ****************************************************************************************
@@ -78,6 +85,7 @@ void clear_rx_int(void);
  ****************************************************************************************
  */
 void clear_event_int(void);
+void ing2p4g_clear_event_int(void);
 
 /**
  ****************************************************************************************
@@ -93,6 +101,7 @@ void clear_event_int(void);
  ****************************************************************************************
  */
 uint8_t GetRxData(ING2P4G_RxPacket *rxpacket);
+uint8_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet);
 
 /**
  ****************************************************************************************
@@ -109,6 +118,7 @@ uint8_t GetRxData(ING2P4G_RxPacket *rxpacket);
  ****************************************************************************************
  */
 uint8_t start_2p4g_RX(uint8_t len, uint8_t *data);
+uint8_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
 
 /**
  ****************************************************************************************
@@ -125,6 +135,7 @@ uint8_t start_2p4g_RX(uint8_t len, uint8_t *data);
  ****************************************************************************************
  */
 uint8_t start_2p4g_TX(uint8_t len, uint8_t *data);
+uint8_t ing2p4g_start_2p4g_tx(uint8_t len, uint8_t *data);
 
 /**
  ****************************************************************************************
@@ -140,6 +151,7 @@ uint8_t start_2p4g_TX(uint8_t len, uint8_t *data);
  ****************************************************************************************
  */
 uint8_t ing_2p4g_set_channel(uint16_t  channel);
+uint8_t ing2p4g_set_channel(uint16_t channel);
 
 /**
  ****************************************************************************************
@@ -155,6 +167,7 @@ uint8_t ing_2p4g_set_channel(uint16_t  channel);
  ****************************************************************************************
  */
 uint8_t ing_2p4g_set_tx_power(uint8_t  tx_power);
+uint8_t ing2p4g_set_tx_power(uint8_t tx_power);
 
 /**
  ****************************************************************************************
@@ -169,6 +182,7 @@ uint8_t ing_2p4g_set_tx_power(uint8_t  tx_power);
  ****************************************************************************************
  */
 uint8_t ing_2p4g_set_access_address(uint32_t  AccAddr);
+uint8_t ing2p4g_set_access_address(uint32_t access_addr);
 
 /**
  ****************************************************************************************
@@ -187,6 +201,7 @@ uint8_t ing_2p4g_set_access_address(uint32_t  AccAddr);
  ****************************************************************************************
  */
 uint8_t ing_2p4g_set_phy(uint8_t phy);
+uint8_t ing2p4g_set_phy(uint8_t phy);
 
 /**
  ****************************************************************************************
@@ -194,6 +209,7 @@ uint8_t ing_2p4g_set_phy(uint8_t phy);
  ****************************************************************************************
  */
 void init_dual_mode();
+void ing2p4g_init_dual_mode(void);
 
 /**
  ****************************************************************************************
@@ -206,5 +222,29 @@ void init_dual_mode();
  ****************************************************************************************
  */
 uint8_t ing_2p4g_get_state(void);
+uint8_t ing2p4g_get_state(void);
+
+/**
+ ****************************************************************************************
+ * @brief switch from BLE to 2.4g
+ *
+ * @param[in] config           the config of 2.4g, see ING2P4G_Config_t
+ *
+ ****************************************************************************************
+ */
+void switch_to_2G4(ING2P4G_Config_t *config);
+void ing2p4g_switch_to_2G4(ING2P4G_Config_t *config);
+
+/**
+ ****************************************************************************************
+ * @brief switch to BLE
+ * 
+ * @return                     the result of switching to BLE:
+ *                             0   : switch success
+ *                             else: failed, return the state of ing2.4g, see ing2p4g_state_type_t
+ ****************************************************************************************
+ */
+uint8_t switch_to_BLE(void);
+uint8_t ing2p4g_switch_to_BLE(void);
 
 #endif

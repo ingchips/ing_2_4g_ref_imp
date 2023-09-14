@@ -6,7 +6,7 @@
 
 uint32_t setup_profile(void *data, void *user_data);
 
-void switch_mode(comm_mode_t mode);
+void ble_switch_to_2p4g_trigger(void);
 #endif
 
 
