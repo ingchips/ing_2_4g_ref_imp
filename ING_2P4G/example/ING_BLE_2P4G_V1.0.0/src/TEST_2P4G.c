@@ -37,7 +37,6 @@ void ing_2p4g_config_init(void)
     ing_2p4g_config.CRCInit       = 0x123456;
     ing_2p4g_config.TimeOut       = 1600;//10000;//6.25s
     ing_2p4g_config.RxPktIntEn    = 0;
-    ing_2p4g_config.RxPktIntThres = 1;
 }
 
 void ing24g_test_do_switch_to_2p4g(void){
@@ -139,7 +138,7 @@ static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status)
     {
         tick_end = platform_get_us_time();
         double rate = 1000*ack_cnt/(float)(tick_end - tick_start);
-        platform_printf("tick_interval:%d us\n", (tick_end - tick_start));
+        // platform_printf("tick_interval:%d us\n", (tick_end - tick_start));
         platform_printf("Test %d packet! miss: %d, rate: %.2fK pack/s\r\n", T_CNT, miss_cnt, rate);
         ack_cnt = 0;
         miss_cnt = 0;
