@@ -132,7 +132,7 @@ ing2p4g_status_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet);
  *                             2: failed, for the device is in RX state now
  ****************************************************************************************
  */
-uint8_t ing2p4g_set_rx_timeout(uint32_t time_out);
+ing2p4g_status_t ing2p4g_set_rx_timeout(uint32_t time_out);
 
 /**
  ****************************************************************************************
