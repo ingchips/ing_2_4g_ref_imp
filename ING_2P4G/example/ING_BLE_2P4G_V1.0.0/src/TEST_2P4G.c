@@ -4,6 +4,9 @@
 #include "btstack_event.h"
 #include "profile.h"
 
+#ifndef DEF_MASTER
+#define DEF_MASTER      1
+#endif
 
 static comm_mode_t comm_mode = MODE_BLE;
 
@@ -35,7 +38,11 @@ void ing_2p4g_config_init(void)
 }
 
 void ing24g_test_do_switch_to_2p4g(void){
-    platform_printf("DO SWITCH 2.4G\n");
+    if(ing_2p4g_config.Mode == MODE_MASTER){
+        platform_printf("DO SWITCH 2.4G: MASTER.\n");
+    } else {
+        platform_printf("DO SWITCH 2.4G: SLAVE.\n");
+    }
     ing2p4g_switch_to_2G4(&ing_2p4g_config);
 }
 
@@ -77,13 +84,15 @@ void ing24g_test_switch_mode_handler(void)
     if(operate_flag == 0)
     {
         ing24g_test_switch_mode_trigger(MODE_2G4);
-        platform_printf("to 2.4g\r\n");
+        platform_printf("to 2.4g ...\r\n");
     }
     else
     {
 #if DEF_MASTER
+        platform_printf("Start to TX ...\r\n");
         ing2p4g_start_2p4g_tx(trans_len, tx_data);
 #else
+        platform_printf("Start to RX ...\r\n");
         ing2p4g_start_2p4g_rx(trans_len, tx_data);
 #endif
     }
@@ -91,29 +100,25 @@ void ing24g_test_switch_mode_handler(void)
 }
 
 #if DEF_MASTER
-static void pacent_cnt(uint16_t count, uint8_t rev_flg)
+static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status)
 {
+    static uint16_t test_cnt = 0;
     static uint16_t ack_cnt = 0;
-    static uint16_t miss_time = 0;
     static uint16_t miss_cnt = 0;
 
-    if(rev_flg == 0)
-    {
+    test_cnt++;
+    if(status == ING2P4G_SUCCESS){
         ack_cnt++;
-    }
-    else
-    {
+    }else{
         miss_cnt++;
     }
-    if(ack_cnt > count)
+
+    if(test_cnt > T_CNT)
     {
-        if(miss_cnt > 0)
-        {
-            miss_time++;
-        }
-        printf("1000 packet! miss: %d, misstime:%d\r\n", miss_cnt, miss_time);
+        printf("Test %d packet! miss: %d\r\n", T_CNT, miss_cnt);
         ack_cnt = 0;
         miss_cnt = 0;
+        test_cnt = 0;
     }
 }
 #else
@@ -134,12 +139,12 @@ static void EventIrqCallBack(void)
 {
     ing2p4g_clear_event_int();
 
-    uint8_t status = ing2p4g_get_rx_data(&RxPkt111);
+    ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
     tx_data[0]++;
 
 #if DEF_MASTER
-    pacent_cnt(1000, status);
+    percent_cnt(1000, status);
     ing2p4g_start_2p4g_tx(trans_len, tx_data);
 #else
     ing2p4g_start_2p4g_rx(trans_len, tx_data);
@@ -149,7 +154,7 @@ static void EventIrqCallBack(void)
 
 static void RxPktIrqCallBack(void)
 {
-    //uint8_t flag = ing2p4g_get_rx_data(&RxPkt111);
+    //ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
     ing2p4g_clear_rx_int();
 }
 
