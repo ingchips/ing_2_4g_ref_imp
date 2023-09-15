@@ -1,6 +1,6 @@
 # 一 基本说明
 
-本demo通过调用`BLE_2P4G_Switch.lib`，可以在ING_SDK基础上，开发支持标准BLE与ing2.4g两种无线协议的项目。
+通过集成`BLE_2P4G_Switch.lib`，可以在ING_SDK基础上，开发支持标准BLE与ing2.4g两种无线协议的项目。
 
 基于ING_SDK8.4.1及以上，使用extension版本协议栈。
 
@@ -8,7 +8,6 @@
 
 ```
 BLE_2P4G_Switch.lib
-BLE_2p4g_Switch.h
 ing_2p4g.h
 ```
 
@@ -16,7 +15,7 @@ ing_2p4g.h
 
 设备存在两种mode， `MODE_BLE`和`MODE_2G4`，对应BLE和ing2.4g两种工作协议。
 
-在`MODE_BLE`下，存在4种state：`BLE_STATE_IDLE`，`BLE_STATE_ADV`，`BLE_STATE_CON`和`BLE_STATE_SCAN`。
+在`MODE_BLE`下，存在4种state：`BLE_STA_IDLE`，`BLE_STA_ADV`，`BLE_STA_CON`和`BLE_STA_SCAN`。
 
 在`MODE_2G4`，存在3中state：`ING2P4G_STATE_IDLE`，`ING2P4G_STATE_TX`和`ING2P4G_STATE_RX`。
 
@@ -34,20 +33,20 @@ Master和SLAVE的角色，是在设备初始化时配置的。
 void ing_2p4g_config_init(void)
 {
     #if DEF_MASTER
-    ing2p4g_config.Mode          = MODE_MASTER;
+    ing_2p4g_config.Mode          = MODE_MASTER;
     #else
-    ing2p4g_config.Mode          = MODE_SLAVE;
+    ing_2p4g_config.Mode          = MODE_SLAVE;
     #endif
-    ing2p4g_config.AccAddr       = 0x12345678;
-    ing2p4g_config.PHY           = LLE_PHY_2M;
-    ing2p4g_config.Channel       = 2400;
-    ing2p4g_config.TXPOW         = 63;
-    ing2p4g_config.WhiteEn       = 0x1;
-    ing2p4g_config.WhiteIdx      = 0x0;
-    ing2p4g_config.CRCInit       = 0x123456;
-    ing2p4g_config.TimeOut       = 1600;//10000;//6.25s
-    ing2p4g_config.RxPktIntEn    = 1;
-    ing2p4g_config.RxPktIntThres = 1;
+    ing_2p4g_config.AccAddr       = 0x1234567A;
+    ing_2p4g_config.PHY           = LLE_PHY_2M;
+    ing_2p4g_config.Channel       = 2400;
+    ing_2p4g_config.TXPOW         = 63;
+    ing_2p4g_config.WhiteEn       = 0x1;
+    ing_2p4g_config.WhiteIdx      = 0x0;
+    ing_2p4g_config.CRCInit       = 0x123456;
+    ing_2p4g_config.TimeOut       = 1600;//10000;//6.25s
+    ing_2p4g_config.RxPktIntEn    = 0;
+    ing_2p4g_config.RxPktIntThres = 1;
 }
 ```
 
@@ -55,9 +54,9 @@ void ing_2p4g_config_init(void)
 
 ### 1 BLE和ing2.4g双模式实现
 
-在已实现好ble的工程中，首先添加`BLE_2P4G_Switch.lib`，并包含两个头文件`BLE_2p4g_Switch.h`，`ing_2p4g.h`。
+在已实现好ble的工程中，首先添加`BLE_2P4G_Switch.lib`，并包含头文件`ing_2p4g.h`。
 
-相对于标准BLE工程，双模式demo在app_main和setup_profile增加了一些初始化工作及回调函数注册，具体参见demo。
+相对于标准BLE工程，双模式需要在app_main和setup_profile增加一些初始化工作，具体参见demo。
 
 ### 2 mode切换
 
@@ -67,31 +66,44 @@ demo默认初始化为BLE mode，通过按键（GPIO10）进行模式切换。
 
 #### 1）BLE切换到ing2.4g
 
-BLE工程通常不会处在IDLE状态，而是会在BLE_STATE_SCAN（扫描）、BLE_STATE_CON（连接）、BLE_STATE_ADV（广播）三种状态中的一种，因此需要先停止当前的扫描、连接或者广播动作，让工程回到idle状态再进行切换。
+BLE工程通常不会处在IDLE状态，而是会在BLE_STA_SCAN（扫描）、BLE_STA_CON（连接）、BLE_STA_ADV（广播）三种状态中的一种，因此需要先停止当前的扫描、连接或者广播动作，让工程回到IDLE状态再进行切换。
+
+具体实现如下：
 
 ```
-	BLE_state_type_t state_now = BLE_state_get();
-    switching_to_2g4 = 1;
-    if (state_now == BLE_STATE_ADV)
-    	gap_set_ext_adv_enable(0, sizeof(adv_sets_en) / sizeof(adv_sets_en[0]), adv_sets_en);
-    else if(state_now == BLE_STATE_CON)
-    {
-    	if (INVALIDE_HANDLE != con_handle)
-        	gap_disconnect(con_handle);
-     }
-     else if(state_now == BLE_STATE_IDLE)
-     {}
+void ble_switch_to_2p4g_trigger(void){
+    platform_printf("%s:%x\n", __func__, ble_status_get());
+    if (ble_status_get() == BLE_STA_IDLE){
+        ing24g_test_do_switch_to_2p4g();
+        return;
+    }
+
+    bleSta.switching_to_24g = 1;
+
+    // check advertisement.
+    if (ble_status_get() & BLE_STA_ADV){
+        // stop advertisement.
+        ble_adv_set(0);
+    }
+
+    // check connection.
+    if(ble_status_get() & BLE_STA_CON){
+        // stop connection.
+        ble_disconn_trigger();
+    }
+
+    // check scan.
+    if(ble_status_get() & BLE_STA_SCAN){
+        // stop scanning.
+    }
+}
 ```
-
-相对于标准BLE工程，需要额外通过`BLE_state_set`接口，在BLE状态变化时进行配置。
-
-也可通过`BLE_state_get`接口来获取当前的BLE状态。
 
 #### 2）ing2.4g切换到BLE
 
 ing2.4g切换到BLE， 同样要注意，不能在`ING2P4G_STATE_TX`和`ING2P4G_STATE_RX`状态下进行切换，如果在这两种状态下进行切换，`switch_to_BLE`会返回错误状态。
 
-可在切换前通过`ing_2p4g_get_state`获取当前状态。
+可在切换前通过`ing2p4g_get_state`获取当前状态。
 
 ### 3 中断回调注册
 
@@ -110,27 +122,28 @@ master和slave分别通过如下接口开启一个TX/RX事件，两个接口都�
 对于TX来说，提供的是将要发送的数据长度和数据，对于RX来说，提供的是ack的payload的长度和数据。
 
 ```
-uint8_t start_2p4g_TX(uint8_t len, uint8_t *data);
-uint8_t start_2p4g_RX(uint8_t len, uint8_t *data);
+ing2p4g_status_t ing2p4g_start_2p4g_tx(uint8_t len, uint8_t *data);
+ing2p4g_status_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
 ```
 
 在注册的中断回调中，如果成功接收到数据，可以通过如下接口获取：
 
 ```
-uint8_t GetRxData(ING2P4G_RxPacket *rxpacket);
+ing2p4g_status_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rxpacket);
 ```
 
 如果事件异常结束，此接口也会返回异常状态。
 
 ### 5 参数调整
 
-提供了4个接口，可以实时调整ing2.4g通讯的各项参数，包括，tx_power，channel，access address和phy。
+提供了5个接口，可以实时调整ing2.4g通讯的各项参数，包括，tx_power，channel，access address，phy和slave的接收的timeout。
 
 ```
-uint8_t ing_2p4g_set_phy(uint8_t phy);
-uint8_t ing_2p4g_set_access_address(uint32_t  AccAddr);
-uint8_t ing_2p4g_set_tx_power(uint8_t  tx_power);
-uint8_t ing_2p4g_set_channel(uint16_t  channel);
+ing2p4g_status_t ing2p4g_set_phy(uint8_t phy);
+ing2p4g_status_t ing2p4g_set_access_address(uint32_t access_addr);
+ing2p4g_status_t ing2p4g_set_tx_power(uint8_t tx_power);
+ing2p4g_status_t ing2p4g_set_channel(uint16_t channel);
+ing2p4g_status_t ing2p4g_set_rx_timeout(uint32_t time_out);
 ```
 
 需要注意的是，调整参数也要在`ING2P4G_STATE_IDLE`状态下才能成功执行，否则会返回错误状态。
