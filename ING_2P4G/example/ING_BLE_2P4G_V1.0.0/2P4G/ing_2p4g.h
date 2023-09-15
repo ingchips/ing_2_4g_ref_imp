@@ -76,7 +76,6 @@ void ing2p4g_set_irq_callback(ing2p4g_callback_type_t type, f_ing2p4g_cb f);
  * @brief clear the rx interrupt flag, used int the callback of rx interrupt
  ****************************************************************************************
  */
-void clear_rx_int(void);
 void ing2p4g_clear_rx_int(void);
 
 /**
@@ -84,7 +83,6 @@ void ing2p4g_clear_rx_int(void);
  * @brief clear the event interrupt flag, used int the callback of event interrupt
  ****************************************************************************************
  */
-void clear_event_int(void);
 void ing2p4g_clear_event_int(void);
 
 /**
@@ -100,7 +98,6 @@ void ing2p4g_clear_event_int(void);
  *                             2: sync error, didn't receive a packet within excepted time
  ****************************************************************************************
  */
-uint8_t GetRxData(ING2P4G_RxPacket *rxpacket);
 uint8_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet);
 
 /**
@@ -117,7 +114,6 @@ uint8_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet);
  *                             2: failed, for the device is in RX state now
  ****************************************************************************************
  */
-uint8_t start_2p4g_RX(uint8_t len, uint8_t *data);
 uint8_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
 
 /**
@@ -134,7 +130,6 @@ uint8_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
  *                             2: failed, for the device is in RX state now
  ****************************************************************************************
  */
-uint8_t start_2p4g_TX(uint8_t len, uint8_t *data);
 uint8_t ing2p4g_start_2p4g_tx(uint8_t len, uint8_t *data);
 
 /**
@@ -150,7 +145,6 @@ uint8_t ing2p4g_start_2p4g_tx(uint8_t len, uint8_t *data);
  *                             3: failed, for param channel out of range
  ****************************************************************************************
  */
-uint8_t ing_2p4g_set_channel(uint16_t  channel);
 uint8_t ing2p4g_set_channel(uint16_t channel);
 
 /**
@@ -166,7 +160,6 @@ uint8_t ing2p4g_set_channel(uint16_t channel);
  *                             2: failed, for the device is in RX state now
  ****************************************************************************************
  */
-uint8_t ing_2p4g_set_tx_power(uint8_t  tx_power);
 uint8_t ing2p4g_set_tx_power(uint8_t tx_power);
 
 /**
@@ -181,7 +174,6 @@ uint8_t ing2p4g_set_tx_power(uint8_t tx_power);
  *                             2: failed, for the device is in RX state now
  ****************************************************************************************
  */
-uint8_t ing_2p4g_set_access_address(uint32_t  AccAddr);
 uint8_t ing2p4g_set_access_address(uint32_t access_addr);
 
 /**
@@ -200,7 +192,6 @@ uint8_t ing2p4g_set_access_address(uint32_t access_addr);
  *                             2: failed, for the device is in RX state now
  ****************************************************************************************
  */
-uint8_t ing_2p4g_set_phy(uint8_t phy);
 uint8_t ing2p4g_set_phy(uint8_t phy);
 
 /**
@@ -208,7 +199,6 @@ uint8_t ing2p4g_set_phy(uint8_t phy);
  * @brief init BLE and ing2.4g dual mode
  ****************************************************************************************
  */
-void init_dual_mode();
 void ing2p4g_init_dual_mode(void);
 
 /**
@@ -221,7 +211,6 @@ void ing2p4g_init_dual_mode(void);
  *                             2: RX state
  ****************************************************************************************
  */
-uint8_t ing_2p4g_get_state(void);
 uint8_t ing2p4g_get_state(void);
 
 /**
@@ -232,7 +221,6 @@ uint8_t ing2p4g_get_state(void);
  *
  ****************************************************************************************
  */
-void switch_to_2G4(ING2P4G_Config_t *config);
 void ing2p4g_switch_to_2G4(ING2P4G_Config_t *config);
 
 /**
@@ -244,7 +232,6 @@ void ing2p4g_switch_to_2G4(ING2P4G_Config_t *config);
  *                             else: failed, return the state of ing2.4g, see ing2p4g_state_type_t
  ****************************************************************************************
  */
-uint8_t switch_to_BLE(void);
 uint8_t ing2p4g_switch_to_BLE(void);
 
 #endif

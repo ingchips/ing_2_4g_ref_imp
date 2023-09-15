@@ -3,62 +3,7 @@
 #include "platform_api.h"
 #include "btstack_event.h"
 #include "profile.h"
-// ================================================================================
 
-void ing2p4g_clear_rx_int(void){
-    clear_rx_int();
-}
-
-void ing2p4g_clear_event_int(void){
-    clear_event_int();
-}
-
-uint8_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet){
-    return GetRxData(rx_packet);
-}
-
-uint8_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data){
-    return start_2p4g_RX(len, data);
-}
-
-uint8_t ing2p4g_start_2p4g_tx(uint8_t len, uint8_t *data){
-    return start_2p4g_TX(len, data);
-}
-
-uint8_t ing2p4g_set_channel(uint16_t channel){
-    return ing_2p4g_set_channel(channel);
-}
-
-uint8_t ing2p4g_set_tx_power(uint8_t tx_power){
-    return ing_2p4g_set_tx_power(tx_power);
-}
-
-uint8_t ing2p4g_set_access_address(uint32_t access_addr){
-    return ing_2p4g_set_access_address(access_addr);
-}
-
-uint8_t ing2p4g_set_phy(uint8_t phy){
-    return ing_2p4g_set_phy(phy);
-}
-
-uint8_t ing2p4g_get_state(void){
-    return ing_2p4g_get_state();
-}
-
-void ing2p4g_init_dual_mode(void){
-    init_dual_mode();
-}
-
-void ing2p4g_switch_to_2G4(ING2P4G_Config_t *config){
-    switch_to_2G4(config);
-}
-
-uint8_t ing2p4g_switch_to_BLE(void){
-    return switch_to_BLE();
-}
-
-
-// ================================================================================
 static uint16_t miss_cnt = 0;
 static uint16_t miss_time = 0;
 static uint16_t ack_cnt = 0;
@@ -190,7 +135,7 @@ static void EventIrqCallBack(void)
 {
     uint8_t i;
     uint8_t flag;
-    clear_event_int();
+    ing2p4g_clear_event_int();
     flag = ing2p4g_get_rx_data(&RxPkt111);
 
     tx_data[0]++;
@@ -208,7 +153,7 @@ static void EventIrqCallBack(void)
 static void RxPktIrqCallBack(void)
 {
     //uint8_t flag = ing2p4g_get_rx_data(rx_data, &len);
-    clear_rx_int();
+    ing2p4g_clear_rx_int();
 }
 
 void ing24g_test_init(void){

@@ -132,7 +132,7 @@
             <UseTargetDll>1</UseTargetDll>
             <UseExternalTool>0</UseExternalTool>
             <RunIndependent>0</RunIndependent>
-            <UpdateFlashBeforeDebugging>0</UpdateFlashBeforeDebugging>
+            <UpdateFlashBeforeDebugging>1</UpdateFlashBeforeDebugging>
             <Capability>1</Capability>
             <DriverSelection>4096</DriverSelection>
           </Flash1>
@@ -547,6 +547,11 @@
               <FileName>BLE_2P4G_Switch.lib</FileName>
               <FileType>4</FileType>
               <FilePath>.\2P4G\BLE_2P4G_Switch.lib</FilePath>
+            </File>
+            <File>
+              <FileName>ing_2p4g.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>.\2P4G\ing_2p4g.h</FilePath>
             </File>
           </Files>
         </Group>
