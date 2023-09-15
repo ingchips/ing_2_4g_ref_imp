@@ -60,7 +60,6 @@ typedef struct
     uint32_t  CRCInit;          /* <=> CRC initial value, 3Bytes */
     uint32_t  TimeOut;          /* <=> Slave rx timeout, 14Bits, Unit 625us */
     uint8_t   RxPktIntEn;       /* <=> Rx packet intterupt enable */
-    uint8_t   RxPktIntThres;    /* <=> Rx packet intterupt threshold */
 } ING2P4G_Config_t;
 
 typedef struct
