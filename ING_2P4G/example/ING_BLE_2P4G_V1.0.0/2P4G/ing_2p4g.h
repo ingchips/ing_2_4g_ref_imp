@@ -196,6 +196,21 @@ uint8_t ing2p4g_set_phy(uint8_t phy);
 
 /**
  ****************************************************************************************
+ * @brief set timeout for the slave RX event
+ *
+ * @param[in] time_out         Range:0-10000
+ *                             timeout = N*625us(0-6.25s)
+ *
+ * @retrun                     the result of set timeout:
+ *                             0: set success
+ *                             1: failed, for the device is in TX state now
+ *                             2: failed, for the device is in RX state now
+ ****************************************************************************************
+ */
+uint8_t ing2p4g_set_rx_timeout(uint32_t time_out);
+
+/**
+ ****************************************************************************************
  * @brief init BLE and ing2.4g dual mode
  ****************************************************************************************
  */
