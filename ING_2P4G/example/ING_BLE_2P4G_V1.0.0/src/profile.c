@@ -47,6 +47,7 @@ typedef struct __attribute__((packed)){
     uint8_t adv_stopping;
     uint8_t disconn_starting;
     uint8_t switching_to_24g;
+    uint8_t switching_to_BLE;
 } BleStatus_t;
 
 static BleStatus_t bleSta = {
@@ -56,6 +57,7 @@ static BleStatus_t bleSta = {
     .adv_stopping = 0,
     .disconn_starting = 0,
     .switching_to_24g = 0,
+    .switching_to_BLE = 0,
 };
 
 // ================================================================================
@@ -189,23 +191,21 @@ static void ble_scan_stop_handler(void){
 
 }
 
-static void ble_hci_reset_handler(void){
-    platform_printf("%s\n", __func__);
-    // if (0 == BLE_2p4g_siwtch_get_initializing_state())
-    // {
-    //     setup_adv();
-    // }
+static void ing2p4g_switch_to_ble_mode_complete(void){
+    platform_printf("Switch to BLE mode complete.\n");
+    ble_adv_set(1);
 }
 
-// for test only.
-void ble_test_handler(void){
+static void ble_hci_reset_handler(void){
     platform_printf("%s\n", __func__);
-    // static uint8_t flag = 0;
-    if(ble_status_get() & BLE_STA_ADV){
-        ble_adv_set(0);
-    } else {
-        ble_adv_set(1);
+    if (bleSta.switching_to_BLE){
+        bleSta.switching_to_BLE = 0;
+        ing2p4g_switch_to_ble_mode_complete();
     }
+}
+
+void ing2p4g_switch_to_ble_mode_start(void){
+    bleSta.switching_to_BLE = 1;
 }
 
 

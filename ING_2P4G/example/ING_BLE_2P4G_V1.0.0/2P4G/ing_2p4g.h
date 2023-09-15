@@ -271,7 +271,9 @@ ing2p4g_status_t ing2p4g_switch_to_2G4(ING2P4G_Config_t *config);
  ****************************************************************************************
  * @brief switch to BLE
  * @note  Before calling this function, you must ensure that 2.4G is idle, otherwise, switching to 
- *        BLE mode will fail. See Return value for details. 
+ *        BLE mode will fail. See Return value for details. When you successfully switch to BLE mode, 
+ *        a HCI_RESET_CMD_OPCODE event is generated, because at the end of this function, btstack_reset() 
+ *        is called to reset the ble protocol stack.
  * 
  * @return                     The result of switching to BLE:
  *                             ING2P4G_SUCCESS          : switch success
