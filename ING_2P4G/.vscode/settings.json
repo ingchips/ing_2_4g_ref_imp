@@ -1,0 +1,12 @@
+{
+    "workbench.colorCustomizations": {
+        "activityBar.background": "#043333",
+        "titleBar.activeBackground": "#054848",
+        "titleBar.activeForeground": "#EDFEFE"
+    },
+    "files.associations": {
+        "test_2p4g.h": "c",
+        "ing_2p4g.h": "c",
+        "*.inc": "c"
+    }
+}
