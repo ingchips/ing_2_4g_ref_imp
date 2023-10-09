@@ -6,11 +6,11 @@
 typedef enum
 {
     MODE_BLE,
-    MODE_2G4,
+    MODE_2G4
 } comm_mode_t;
 
-#define MODE_MASTER         0x0
-#define MODE_SLAVE          0x1
+//#define MODE_MASTER         0x0
+//#define MODE_SLAVE          0x1
 
 #define LLE_PHY_1M          0x0
 #define LLE_PHY_2M          0x1
@@ -18,6 +18,13 @@ typedef enum
 #define LLE_PHY_CODED_S8    0x3
 
 #define MAX_RX_PAYLOAD_LEN  32
+
+
+typedef enum
+{
+    MODE_MASTER,
+    MODE_SLAVE
+} ing2p4g_work_mode_t;
 
 typedef enum
 {
@@ -136,7 +143,8 @@ ing2p4g_status_t ing2p4g_set_rx_timeout(uint32_t time_out);
 /**
  ****************************************************************************************
  * @brief start a RX event for ing2.4g slave, and set the ack data
- *
+ * @note  make sure the work mode of 2.4g is MODE_MASETR, or you can set it by ing2p4g_set_2g4_work_mode
+ * 
  * @param[in] len              The length of the ack data, should be less than MAX_RX_PAYLOAD_LEN
  *                             if greater than MAX_RX_PAYLOAD_LEN, set to MAX_RX_PAYLOAD_LEN
  * @param[in] data             The pointer to the ack data
@@ -153,7 +161,8 @@ ing2p4g_status_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
 /**
  ****************************************************************************************
  * @brief start a TX event for master, and configure the data to be sent
- *
+ * @note  make sure the work mode of 2.4g is MODE_MASETR, or you can set it by ing2p4g_set_2g4_work_mode
+ * 
  * @param[in] len              The length of the ack data, must be less than MAX_RX_PAYLOAD_LEN
  *                             if greater than MAX_RX_PAYLOAD_LEN, set to MAX_RX_PAYLOAD_LEN
  * @param[in] data             The pointer to the ack data
@@ -292,5 +301,48 @@ ing2p4g_status_t ing2p4g_switch_to_BLE(void);
  ****************************************************************************************
  */
 void ing2p4g_init_dual_mode(void);
+
+/**
+ ****************************************************************************************
+ * @brief get the state of the device, reference: comm_mode_t
+ *
+ * @retrun                     The result of get state:
+ *                             0          : MODE_BLE
+ *                             1          : MODE_2G4.
+ ****************************************************************************************
+ */
+uint8_t ing_ble_2p4g_state_get(void);
+
+/**
+ ****************************************************************************************
+ * @brief get the work mode of the ing2.4g, reference: ing2p4g_work_mode_t
+ * @note  It's OK to be called when TX/RX going
+ *
+ * @param[out] state           The work mode of ing2.4g:
+ *                                                    0: MODE_MASTER
+ *                                                    1: MODE_SLAVE
+ * @return                     The result of reading the work mode of ing2.4g:
+ *                             ING2P4G_SUCCESS         : success
+ *                             ING2P4G_MODE_ERROR      : failed, It is not in 2.4G mode.
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_get_2g4_work_mode(ing2p4g_work_mode_t *mode);
+
+/**
+ ****************************************************************************************
+ * @brief set the work mode of the ing2.4g, reference: ing2p4g_work_mode_t
+ *
+ * @param[in] state            The work mode of ing2.4g:
+ *                                                    0: MODE_MASTER
+ *                                                    1: MODE_SLAVE
+ *                             ING2P4G_STATE_RX        : RX state
+ * @return                     The result of reading the work mode of ing2.4g:
+ *                             ING2P4G_SUCCESS         : success
+ *                             ING2P4G_MODE_ERROR      : failed, It is not in 2.4G mode.
+ *                             ING2P4G_ERROR_TX_GOING   : failed, for the device is in TX state now
+ *                             ING2P4G_ERROR_RX_GOING   : failed, for the device is in RX state now
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_set_2g4_work_mode(ing2p4g_work_mode_t mode);
 
 #endif

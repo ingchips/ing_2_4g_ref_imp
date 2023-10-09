@@ -337,9 +337,9 @@
             <v6Rtti>0</v6Rtti>
             <VariousControls>
               <MiscControls></MiscControls>
-              <Define>USE_STDPERIPH_DRIVER,DEF_MASTER=1</Define>
+              <Define>USE_STDPERIPH_DRIVER,</Define>
               <Undefine></Undefine>
-              <IncludePath>./2P4G/;../../bundles/extension/inc;../../bundles/extension/inc/os;../../src/BSP;../../src/FWlib;../../src/StartUP/ing916;../../src/Tools;../../src</IncludePath>
+              <IncludePath>./2P4G/;../../bundles/extension/inc;../../bundles/extension/inc/os;../../src/BSP;../../src/FWlib;../../src/StartUP/ing916;../../src/Tools;../../src;./2P4G/registers</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -397,6 +397,11 @@
               <FileName>TEST_2P4G.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\TEST_2P4G.c</FilePath>
+            </File>
+            <File>
+              <FileName>uart_console.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\uart_console.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -544,14 +549,9 @@
           <GroupName>2P4G</GroupName>
           <Files>
             <File>
-              <FileName>BLE_2P4G_Switch.lib</FileName>
+              <FileName>ing_2p4g.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>.\2P4G\BLE_2P4G_Switch.lib</FilePath>
-            </File>
-            <File>
-              <FileName>ing_2p4g.h</FileName>
-              <FileType>5</FileType>
-              <FilePath>.\2P4G\ing_2p4g.h</FilePath>
+              <FilePath>.\2P4G\ing_2p4g.lib</FilePath>
             </File>
           </Files>
         </Group>

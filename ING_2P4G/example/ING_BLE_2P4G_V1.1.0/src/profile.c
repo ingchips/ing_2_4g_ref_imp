@@ -99,6 +99,12 @@ static void ble_disconn_trigger(void){
 
 // ================================================================================
 void ble_switch_to_2p4g_trigger(void){
+    uint8_t ingstate = ing_ble_2p4g_state_get();
+    if(ingstate == 1)
+    {
+        platform_printf("Already 2g4 mode.");
+        return;
+    }
     platform_printf("%s:%x\n", __func__, ble_status_get());
     if (ble_status_get() == BLE_STA_IDLE){
         ing24g_test_do_switch_to_2p4g();
@@ -191,9 +197,11 @@ static void ble_scan_stop_handler(void){
 
 }
 
+static void setup_adv(void);
 static void ing2p4g_switch_to_ble_mode_complete(void){
     platform_printf("Switch to BLE mode complete.\n");
-    ble_adv_set(1);
+    setup_adv();
+    //ble_adv_set(1);
 }
 
 static void ble_hci_reset_handler(void){
