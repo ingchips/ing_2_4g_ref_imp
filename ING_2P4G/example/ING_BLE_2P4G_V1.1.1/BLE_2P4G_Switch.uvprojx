@@ -549,9 +549,9 @@
           <GroupName>2P4G</GroupName>
           <Files>
             <File>
-              <FileName>ing_2p4g.lib</FileName>
+              <FileName>BLE_2P4G_Switch.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>.\2P4G\ing_2p4g.lib</FilePath>
+              <FilePath>.\2P4G\BLE_2P4G_Switch.lib</FilePath>
             </File>
           </Files>
         </Group>

@@ -6,8 +6,8 @@
 
 static comm_mode_t comm_mode = MODE_BLE;
 
-static uint8_t master_tx_len = 10;
-static uint8_t slave_tx_len = 0;
+static uint8_t master_tx_len = 20;
+static uint8_t slave_tx_len = 4;
 static uint8_t tx_data[]={0,5,4,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31}; 
 static uint8_t rx_data[256];
 static ING2P4G_RxPacket RxPkt111;
