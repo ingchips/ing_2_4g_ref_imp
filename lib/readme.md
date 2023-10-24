@@ -1,6 +1,10 @@
 # 版本记录：
 
-### BLE_2P4G_Switch_V1.1.2.lib
+### BLE_2P4G_Switch_V1.2.1.lib
+
+修改了浮点数不能运算的问题
+
+### BLE_2P4G_Switch_V1.2.0.lib
 
 增加了RSSI扫描接口，可以扫描特定频点的拥挤程度
 

@@ -152,11 +152,33 @@ Reset_Handler   PROC
 
                 ALIGN
 
-Override_Handler\
-                PROC
-                EXPORT  Override_Handler         [WEAK]
-                B       .
-                ENDP
+Override_Handler PROC
+                IMPORT UserHandler
+
+                ; int irq = SCB->ICSR & SCB_ICSR_VECTACTIVE_Msk;
+                LDR     r0, =0xE000ED04
+                LDR     r1, [r0]
+                BFC     r1,#9,#23
+
+                ; if (irq > 15) call UserHandler; else call default
+                CMP     r1, #0x0F
+                BGT     CALL_USER_ISR
+
+                ; TODO: response Exception
+
+                ; continue to call Exception handle function from platform
+                ; f_irq_handler isr = (f_irq_handler)io_read(PLATFORM_NVIC_VECT + irq * 4);
+                ; take ING916xx for example,start address of interrupt vector table of platfrom is 0x02002000
+                LDR     r0, =0x02002000
+                LDR     r0, [r0, r1, LSL #2]
+                BX      r0
+
+CALL_USER_ISR
+                MOV     r0, r1
+                LDR     r1, =UserHandler
+                BX      r1
+
+				ENDP
                     
 main            PROC
                 EXPORT  main
