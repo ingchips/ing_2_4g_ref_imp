@@ -1,5 +1,12 @@
 # 版本记录：
 
+### BLE_2P4G_Switch_V1.3.0.lib
+
+- 打包了sdk源码，基于V8.4.1
+- 增加了tx_pkt_event中断源
+- 修改了tx配置后while死等的方式
+- 修复了初始化为2Mphy通讯失败的问题
+
 ### BLE_2P4G_Switch_V1.2.1.lib
 
 修改了浮点数不能运算的问题
