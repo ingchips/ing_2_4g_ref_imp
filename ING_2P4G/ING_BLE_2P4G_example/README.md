@@ -1,3 +1,3 @@
-# ING_BLE_2P4G_Console_V1.2.1_source
+# BLE_2P4G_Switch
 
 Add a description of your project here.

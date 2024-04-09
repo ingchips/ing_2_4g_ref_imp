@@ -275,8 +275,8 @@
               </OCR_RVCT3>
               <OCR_RVCT4>
                 <Type>1</Type>
-                <StartAddress>0x202a000</StartAddress>
-                <Size>0x56000</Size>
+                <StartAddress>0x202b000</StartAddress>
+                <Size>0x55000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -300,8 +300,8 @@
               </OCR_RVCT8>
               <OCR_RVCT9>
                 <Type>0</Type>
-                <StartAddress>0x20005450</StartAddress>
-                <Size>0x2bb0</Size>
+                <StartAddress>0x20005460</StartAddress>
+                <Size>0x2ba0</Size>
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
@@ -402,6 +402,11 @@
               <FileName>uart_console.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\src\uart_console.c</FilePath>
+            </File>
+            <File>
+              <FileName>my_irq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\src\my_irq.c</FilePath>
             </File>
           </Files>
         </Group>

@@ -3,6 +3,9 @@
 #include "platform_api.h"
 #include "btstack_event.h"
 #include "profile.h"
+#include "ing_2p4g.h"
+
+#define PULSE_TEST_GPIO     GIO_GPIO_28
 
 static comm_mode_t comm_mode = MODE_BLE;
 
@@ -17,6 +20,15 @@ void ing24g_test_switch_mode_trigger(comm_mode_t mode);
 
 // ================================================================================
 
+void gpio_pluse_num(uint16_t num)
+{
+    uint16_t i = 0;
+    for(i=0; i<num; i++)
+    {
+        GIO_WriteValue(PULSE_TEST_GPIO, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO, 0);
+    }
+}
 void ing_2p4g_config_init(void)
 {
     ing_2p4g_config.Mode          = MODE_MASTER;
@@ -28,7 +40,7 @@ void ing_2p4g_config_init(void)
     ing_2p4g_config.WhiteIdx      = 0x0;
     ing_2p4g_config.CRCInit       = 0x123456;
     ing_2p4g_config.TimeOut       = 1600;//10000;//6.25s
-    ing_2p4g_config.RxPktIntEn    = 0;
+    ing_2p4g_config.RxPktIntEn    = 1;
     ing_2p4g_config.TxPktIntEn    = 1;
 }
 
@@ -127,7 +139,7 @@ void ing24g_test_switch_mode_handler(void)
     operate_flag++;
 }
 
-static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status)
+static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status, int8_t rssi)
 {
     static uint16_t test_cnt = 0;
     static uint16_t ack_cnt = 0;
@@ -146,7 +158,7 @@ static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status)
         tick_end = platform_get_us_time();
         double rate = 1000*ack_cnt/(float)(tick_end - tick_start);
         //platform_printf("tick_interval:%d us\n", (tick_end - tick_start));
-        platform_printf("Test %d packet! miss: %d,rev: %d, rate: %.3fK pack/s\r\n", T_CNT, miss_cnt, ack_cnt, rate);
+        platform_printf("Test %d packet! miss: %d,rev: %d, rate: %.3fK pack/s, rssi:%d\r\n", T_CNT, miss_cnt, ack_cnt, rate, rssi);
         ack_cnt = 0;
         miss_cnt = 0;
         test_cnt = 0;
@@ -154,7 +166,7 @@ static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status)
     }
 }
 
-static void EventIrqCallBack(void)
+ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
 {
     static ing2p4g_work_mode_t mode;
 
@@ -163,12 +175,12 @@ static void EventIrqCallBack(void)
     ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
     tx_data[0]++;
-
+    gpio_pluse_num(1);
     if(continus_2g4 == 1)
     {
         if(mode == MODE_MASTER)
         {
-            percent_cnt(1000, status);
+            percent_cnt(1000, status, RxPkt111.RSSI);
             ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
         }
         else
@@ -180,14 +192,16 @@ static void EventIrqCallBack(void)
 
 static void RxPktIrqCallBack(void)
 {
-    //ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
+    //ing2p4g_err_bit_pos_t status = ing2p4g_get_rx_data(&RxPkt111);
     ing2p4g_clear_rx_int();
+    gpio_pluse_num(1);
 }
 
-static void TxPktIrqCallBack(void)
+ADDITIONAL_ATTRIBUTE static void TxPktIrqCallBack(void)
 {
-    //ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
+    //ing2p4g_err_bit_pos_t status = ing2p4g_get_rx_data(&RxPkt111);
     ing2p4g_clear_tx_int();
+    gpio_pluse_num(2);
 }
 
 void ing24g_test_init(void){

@@ -13,6 +13,7 @@
 #include "uart_console.h"
 
 #define SWITCH_KEY_GPIO     GIO_GPIO_10
+#define PULSE_TEST_GPIO     GIO_GPIO_28
 
 static uint32_t cb_hard_fault(hard_fault_info_t *info, void *_)
 {
@@ -90,7 +91,9 @@ void setup_peripherals(void)
                         GIO_INT_EDGE);
     GIO_DebounceCtrl(1, 200, GIO_DB_CLK_32K);
     GIO_DebounceEn(SWITCH_KEY_GPIO, 1);
-    
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO, 0);
 }
 
 uint32_t on_lle_init(void *dummy, void *user_data)

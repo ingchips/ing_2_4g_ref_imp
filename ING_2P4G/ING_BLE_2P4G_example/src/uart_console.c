@@ -47,10 +47,10 @@ static const char help[] =  "commands:\n"
                             "power                               set tx power\n"
                             "channel                             set channel\n"
                             "txcon                               2.4g tx continus\n"
-                            "txone                               tx one packet with x payload"
-                            "stopcon                             stop 2.4g continus tx/rx"
+                            "txone                               tx one packet with x payload\n"
+                            "stopcon                             stop 2.4g continus tx/rx\n"
                             "rxcon                               2.4g rx contiuns\n"
-                            "rxone                               rx one packet with x payload"
+                            "rxone                               rx one packet with x payload\n"
                             "timeout                             set rx timeout\n"
                             "rxdata                              get rx data\n"
                             "rxint                               clear rx interrupt\n"
@@ -264,18 +264,21 @@ static uint8_t rx_data[256];
 static uint8_t ing2g4_len = 10;
 static ING2P4G_RxPacket RxPkt111;
 extern uint8_t continus_2g4;
+static uint32_t test_tick_us[4];
 void cmd_tx_one_packet(const char *param)
 {
     ing2p4g_status_t state;
     ing2p4g_set_2g4_work_mode(MODE_MASTER);
+    test_tick_us[0] = platform_get_us_time();
     state = ing2p4g_start_2p4g_tx(ing2g4_len, ing2g4_tx_data);
+    test_tick_us[1] = platform_get_us_time();
     if(state == ING2P4G_MODE_ERROR)
     {
         platform_printf("Not in 2.4g mode.\r\n");
     }
     else
     {
-        platform_printf("tx result:%d.\r\n", state);
+        platform_printf("tx result:%d, tx:%dus.\r\n", state, test_tick_us[1]-test_tick_us[0]);
     }
 }
 
@@ -303,14 +306,16 @@ void cmd_rx_one_packet(const char *param)
 {
     ing2p4g_status_t state;
     ing2p4g_set_2g4_work_mode(MODE_SLAVE);
+    test_tick_us[2] = platform_get_us_time();
     state = ing2p4g_start_2p4g_rx(ing2g4_len, ing2g4_tx_data);
+    test_tick_us[3] = platform_get_us_time();
     if(state == ING2P4G_MODE_ERROR)
     {
         platform_printf("Not in 2.4g mode.\r\n");
     }
     else
     {
-        platform_printf("rx result:%d.\r\n", state);
+        platform_printf("rx result:%d, rx:%dus.\r\n", state, test_tick_us[3]-test_tick_us[2]);
     }
 }
 

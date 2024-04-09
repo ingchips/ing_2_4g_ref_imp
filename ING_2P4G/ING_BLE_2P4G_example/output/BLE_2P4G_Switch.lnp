@@ -3,6 +3,7 @@
 ".\output\profile.o"
 ".\output\test_2p4g.o"
 ".\output\uart_console.o"
+".\output\my_irq.o"
 "..\sdk\bundles\extension\ING9168xx\symdefs.m"
 ".\output\startup_ing91600.o"
 ".\output\eflash.o"

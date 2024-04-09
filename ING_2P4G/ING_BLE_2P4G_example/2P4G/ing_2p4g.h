@@ -3,7 +3,10 @@
 #define ING__2P4G__H
 #include "stdint.h"
 
+#ifndef OPT_RAM_CODE
 #define OPT_RAM_CODE
+#endif
+
 #ifdef OPT_RAM_CODE
     #define ADDITIONAL_ATTRIBUTE    __attribute__((section(".ram_code")))
 #else
@@ -15,6 +18,9 @@ typedef enum
     MODE_BLE,
     MODE_2G4
 } comm_mode_t;
+
+#define ING_2P4G_OK    (0)
+#define ING_2P4G_ERROR (-1)
 
 //#define MODE_MASTER         0x0
 //#define MODE_SLAVE          0x1
@@ -56,20 +62,10 @@ typedef enum
 
 typedef enum
 {
-    ING2P4G_TYPE_ERR,
-    ING2P4G_SYNC_ERR,
-    ING2P4G_CRC_ERR,
-    ING2P4G_MIC_ERR,
-    ING2P4G_LEN_ERR,
-    ING2P4G_SN_ERR,
-    ING2P4G_NESN_ERR,
-    ING2P4G_RXPKT_NEXT_LOC_ERR,
-} ing2p4g_err_bit_pos_t;
-
-typedef enum
-{
     ING2P4G_SUCCESS,            /* <=> Operate success. */
     ING2P4G_MODE_ERROR,         /* <=> It is not in 2.4G/BLE mode. */
+    ING2P4G_TIMEOUT_ERR,        /* <=> No packet was received at expected time. */
+    ING2P4G_CRC_ERR,            /* <=> Receive the packed but CRC failed. */
     ING2P4G_ERROR_TX_GOING,     /* <=> TX procedure is going. */
     ING2P4G_ERROR_RX_GOING,     /* <=> RX procedure is going */
     ING2P4G_PARAM_ERROR,        /* <=> Input parameters out of range */
@@ -95,6 +91,7 @@ typedef struct
 {
     uint8_t   DataLen;
     uint8_t   Data[256];
+    int8_t    RSSI;
 } ING2P4G_RxPacket;
 
 typedef void (*f_ing2p4g_cb)(void);
@@ -151,7 +148,7 @@ ing2p4g_status_t ing2p4g_clear_event_int(void);
  *
  * @return                     The status of communication
  *                             ING2P4G_SUCCESS          : communication ok
- *                             other                    : failed, see ing2p4g_err_bit_pos_t
+ *                             other                    : failed, see ing2p4g_status_t
  ****************************************************************************************
  */
 ing2p4g_status_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet);
