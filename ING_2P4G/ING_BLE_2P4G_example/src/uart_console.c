@@ -362,20 +362,23 @@ void cmd_shutdown(const char *param)
     platform_shutdown(0, NULL, 0);
 }
 
+
+
 void cmd_test_inst(const char *param)
 {
-    uint16_t RSSI, RX_GAIN;
-    while(1)
-    {
-        RSSI_LISTEN(2402, &RSSI, &RX_GAIN);
-        printf("Freq 2402 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
-        RSSI_LISTEN(2410, &RSSI, &RX_GAIN);
-        printf("Freq 2410 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
-        RSSI_LISTEN(2440, &RSSI, &RX_GAIN);
-        printf("Freq 2440 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
-        RSSI_LISTEN(2480, &RSSI, &RX_GAIN);
-        printf("Freq 2480 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
-    }
+    platform_printf("time:%lld\n", platform_get_us_time());
+//    uint16_t RSSI, RX_GAIN;
+//    while(1)
+//    {
+//        RSSI_LISTEN(2402, &RSSI, &RX_GAIN);
+//        printf("Freq 2402 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
+//        RSSI_LISTEN(2410, &RSSI, &RX_GAIN);
+//        printf("Freq 2410 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
+//        RSSI_LISTEN(2440, &RSSI, &RX_GAIN);
+//        printf("Freq 2440 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
+//        RSSI_LISTEN(2480, &RSSI, &RX_GAIN);
+//        printf("Freq 2480 : RSSI = %d, RX_GAIN = %d\r\n", RSSI, RX_GAIN);
+//    }
     //platform_printf("test\r\n");
 }
 

@@ -3,7 +3,7 @@
  * Auto generated Run-Time-Environment Configuration File
  *      *** Do not modify ! ***
  *
- * Project: 'BLE_2P4G_Switch' 
+ * Project: 'ING_BLE_2P4G_example' 
  * Target:  'Target 1' 
  */
 
