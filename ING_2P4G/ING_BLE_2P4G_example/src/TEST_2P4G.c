@@ -50,10 +50,12 @@ void ing24g_test_do_switch_to_2p4g(void){
     } else {
         platform_printf("DO SWITCH 2.4G: SLAVE.\n");
     }
+    platform_config(PLATFORM_CFG_LL_DBG_FLAGS, 32);
     ing2p4g_switch_to_2G4(&ing_2p4g_config);
 }
 
 void ing24g_test_do_switch_to_BLE(void){
+    platform_config(PLATFORM_CFG_LL_DBG_FLAGS, 0x10);
     ing2p4g_switch_to_ble_mode_start();
     ing2p4g_switch_to_BLE();
 }

@@ -206,6 +206,7 @@ int app_main()
     platform_set_irq_callback(PLATFORM_CB_IRQ_GPIO, gpio_isr, NULL);
     platform_set_irq_callback(PLATFORM_CB_IRQ_UART0, uart_isr, NULL);
 
+    platform_config(PLATFORM_CFG_LL_DBG_FLAGS, 0x10);
     // BLE and ing2.4g dual mode init.
     ing2p4g_init_dual_mode();
     uart_console_start();
