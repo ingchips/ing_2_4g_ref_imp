@@ -2,16 +2,7 @@
 #ifndef ING__2P4G__H
 #define ING__2P4G__H
 #include "stdint.h"
-
-#ifndef OPT_RAM_CODE
-#define OPT_RAM_CODE
-#endif
-
-#ifdef OPT_RAM_CODE
-    #define ADDITIONAL_ATTRIBUTE    __attribute__((section(".ram_code")))
-#else
-    #define ADDITIONAL_ATTRIBUTE
-#endif
+#include "ing_ram_code.h"
 
 typedef enum
 {
@@ -185,6 +176,28 @@ ing2p4g_status_t ing2p4g_set_rx_timeout(uint32_t time_out);
  ****************************************************************************************
  */
 ing2p4g_status_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
+
+/**
+ ****************************************************************************************
+ * @brief start a RX event for ing2.4g slave, and set the ack data
+ * @note  make sure the work mode of 2.4g is MODE_MASETR, or you can set it by ing2p4g_set_2g4_work_mode
+ * 
+ * @param[in] len              The length of ack data, should be less than MAX_RX_PAYLOAD_LEN
+ *                             if greater than MAX_RX_PAYLOAD_LEN, set to MAX_RX_PAYLOAD_LEN
+ * @param[in] data             The pointer to ack data
+ * @param[in] timeout_mode     1-wide mode, timeout is larger than 625us, the unit of timeout is 625us
+ *                             0-normal mode, timeout is 1-625us, the unit of timeout is 1us
+ * @param[in] timeout          when in wide mode, timeout: 0-100000, when lagrer than 100000, set to 100000
+ *                             when in timeout mode, timeout: 0-624, when lagrer than 624, set to 624
+ *
+ * @retrun                     The result of RX:
+ *                             ING2P4G_SUCCESS          : rx success
+ *                             ING2P4G_MODE_ERROR       : failed, It is not in 2.4G mode.
+ *                             ING2P4G_ERROR_TX_GOING   : failed, for the device is in TX state now
+ *                             ING2P4G_ERROR_RX_GOING   : failed, for the device is in RX state now
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_start_2p4g_rx_with_timeout(uint8_t len, uint8_t *data, uint8_t timeout_mode, uint32_t timeout);
 
 /**
  ****************************************************************************************
@@ -417,6 +430,5 @@ void RSSI_SET_LISTEN_WINDOW(uint32_t size);
 
 void ing2p4g_lle_rst(void);
 void ing2p4g_lle_init(void);
-void ing2p4g_malloc_cont_mem(void);
 
 #endif

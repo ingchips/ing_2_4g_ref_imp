@@ -134,7 +134,8 @@ void ing24g_test_switch_mode_handler(void)
         else
         {
             platform_printf("Start to RX ...\r\n");
-            ing2p4g_start_2p4g_rx(slave_tx_len, tx_data);
+//            ing2p4g_start_2p4g_rx(slave_tx_len, tx_data);
+            ing2p4g_start_2p4g_rx_with_timeout(slave_tx_len, tx_data, 0, ing_2p4g_config.TimeOut);
         }
 
     }
