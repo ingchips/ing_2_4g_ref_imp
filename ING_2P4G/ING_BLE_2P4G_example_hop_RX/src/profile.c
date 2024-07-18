@@ -204,11 +204,16 @@ static void ing2p4g_switch_to_ble_mode_complete(void){
     //ble_adv_set(1);
 }
 
+static uint8_t tx_data = 0;
 static void ble_hci_reset_handler(void){
     platform_printf("%s\n", __func__);
     if (bleSta.switching_to_BLE){
         bleSta.switching_to_BLE = 0;
         ing2p4g_switch_to_ble_mode_complete();
+    }else
+    {
+        platform_printf("2G4 init ok\n");
+        ing2p4g_start_2p4g_rx(1, &tx_data);
     }
 }
 

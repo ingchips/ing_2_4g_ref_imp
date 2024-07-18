@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "ing_2p4g.h": "c",
+        "platform_api.h": "c",
+        "btstack_event.h": "c"
+    }
+}

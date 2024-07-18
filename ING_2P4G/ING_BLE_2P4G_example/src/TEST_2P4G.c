@@ -31,17 +31,17 @@ void gpio_pluse_num(uint16_t num)
 }
 void ing_2p4g_config_init(void)
 {
-    ing_2p4g_config.Mode          = MODE_MASTER;
-    ing_2p4g_config.AccAddr       = 0x1234567A;
-    ing_2p4g_config.PHY           = LLE_PHY_2M;
-    ing_2p4g_config.Channel       = 2400;
+    ing_2p4g_config.Mode          = MODE_SLAVE;
+    ing_2p4g_config.AccAddr       = 0x3234567A;
+    ing_2p4g_config.PHY           = LLE_PHY_1M;
+    ing_2p4g_config.Channel       = 2399;
     ing_2p4g_config.TXPOW         = 63;
     ing_2p4g_config.WhiteEn       = 0x1;
     ing_2p4g_config.WhiteIdx      = 0x0;
     ing_2p4g_config.CRCInit       = 0x123456;
-    ing_2p4g_config.TimeOut       = 1600;//10000;//6.25s
-    ing_2p4g_config.RxPktIntEn    = 1;
-    ing_2p4g_config.TxPktIntEn    = 1;
+    ing_2p4g_config.TimeOut       = 20;//*6.25us
+    ing_2p4g_config.RxPktIntEn    = 0;
+    ing_2p4g_config.TxPktIntEn    = 0;
 }
 
 void ing24g_test_do_switch_to_2p4g(void){

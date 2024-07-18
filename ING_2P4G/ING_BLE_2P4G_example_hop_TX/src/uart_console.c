@@ -285,7 +285,6 @@ void cmd_tx_one_packet(const char *param)
 void cmd_tx_continus(const char *param)
 {
     ing2p4g_status_t state;
-    continus_2g4_txrx_on();
     ing2p4g_set_2g4_work_mode(MODE_MASTER);
     state = ing2p4g_start_2p4g_tx(ing2g4_len, ing2g4_tx_data);
     if(state == ING2P4G_MODE_ERROR)
@@ -295,6 +294,7 @@ void cmd_tx_continus(const char *param)
     else
     {
         platform_printf("tx continus result:%d.\r\n", state);
+        continus_2g4_txrx_on();
         if(state != ING2P4G_SUCCESS)
         {
             continus_2g4_txrx_off();    

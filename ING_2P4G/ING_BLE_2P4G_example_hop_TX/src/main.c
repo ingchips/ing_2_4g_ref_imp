@@ -12,9 +12,6 @@
 #include "TEST_2P4G.h"
 #include "uart_console.h"
 
-#define SWITCH_KEY_GPIO     GIO_GPIO_10
-#define PULSE_TEST_GPIO     GIO_GPIO_28
-
 static uint32_t cb_hard_fault(hard_fault_info_t *info, void *_)
 {
     platform_printf("HARDFAULT:\nPC : 0x%08X\nLR : 0x%08X\nPSR: 0x%08X\n"
@@ -77,7 +74,7 @@ void config_uart(uint32_t freq, uint32_t baud)
 
 void setup_peripherals(void)
 {
-    config_uart(OSC_CLK_FREQ, 115200);
+    config_uart(OSC_CLK_FREQ, 460800);
     SYSCTRL_ClearClkGateMulti(  (1 << SYSCTRL_ClkGate_APB_GPIO0)
                               | (1 << SYSCTRL_ClkGate_APB_PinCtrl)
                               | (1 << SYSCTRL_ClkGate_APB_TMR0)
@@ -91,9 +88,14 @@ void setup_peripherals(void)
                         GIO_INT_EDGE);
     GIO_DebounceCtrl(1, 200, GIO_DB_CLK_32K);
     GIO_DebounceEn(SWITCH_KEY_GPIO, 1);
-    PINCTRL_SetPadMux(PULSE_TEST_GPIO, IO_SOURCE_GPIO);
-    GIO_SetDirection(PULSE_TEST_GPIO, GIO_DIR_OUTPUT);
-    GIO_WriteValue(PULSE_TEST_GPIO, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO1, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO1, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO1, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO2, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO2, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO2, 0);
+    
+    test_2p4g_timer_init();
 }
 
 uint32_t on_lle_init(void *dummy, void *user_data)
