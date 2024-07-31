@@ -426,9 +426,25 @@ ing2p4g_status_t RSSI_LISTEN(uint16_t Freq, uint16_t *RSSI, uint16_t *RX_GAIN);
  * @param[in]   size           window size(us), default 100us:
  ****************************************************************************************
  */
+ 
+ 
 void RSSI_SET_LISTEN_WINDOW(uint32_t size);
+
+/**
+ ****************************************************************************************
+ * @brief stop the current tx/rx rf event
+ *
+ * note: be careful to use this function. after you call it:
+ *              1)the tx interrupt/rx interrupt is disabled(ing_2p4g_config.RxPktIntEn = 0;ing_2p4g_config.TxPktIntEn    = 0;)
+ *              2)the whiten is enable£¨ing_2p4g_config.WhiteEn = 0x1;£©
+ *              which are the normally config. If you want to enable teh tx/rx interrupt or disable whiteEn, must call function ing2p4g_lle_set_parameter
+ ****************************************************************************************
+ */
+
+void ing24g_rf_stop(void);
 
 void ing2p4g_lle_rst(void);
 void ing2p4g_lle_init(void);
+
 
 #endif
