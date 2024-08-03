@@ -2,7 +2,7 @@
 
 通过集成`BLE_2P4G_Switch.lib`，可以在ING_SDK基础上，开发支持标准BLE与ing2.4g两种无线协议的项目。
 
-基于ING_SDK8.4.1及以上，使用extension版本协议栈。
+例程基于ING_SDK8.4.1及以上，使用extension版本协议栈。
 
 ### 1 所需文件
 

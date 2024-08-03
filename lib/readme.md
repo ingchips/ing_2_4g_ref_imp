@@ -1,5 +1,11 @@
 # 版本记录：
 
+### BLE_2P4G_Switch.lib
+
+截至20240803的最新版本，以后lib文件不再此处更新，只更新例程中的lib文件。
+
+...\ING_2P4G\ING_BLE_2P4G_example\2P4G
+
 ### BLE_2P4G_Switch_V1.3.0.lib
 
 - 打包了sdk源码，基于V8.4.1
