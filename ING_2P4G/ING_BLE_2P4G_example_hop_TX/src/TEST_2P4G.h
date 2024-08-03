@@ -16,6 +16,9 @@
 #define PULSE_TEST_GPIO1     GIO_GPIO_20
 #define PULSE_TEST_GPIO2     GIO_GPIO_21
 
+#define MASTER_HOP_DATA_LEN       1
+#define MASTER_COM_DATA_LEN       2
+
 typedef struct
 {
     uint16_t     channel_hop[APP_2G4_HOP_CHANNEL_NUM];

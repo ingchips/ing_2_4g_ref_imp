@@ -23,6 +23,8 @@ typedef enum
 
 #define MAX_RX_PAYLOAD_LEN  255
 
+#define ING_2P4G_VER   1.0.1
+
 
 typedef enum
 {

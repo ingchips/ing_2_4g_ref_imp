@@ -89,9 +89,18 @@ void setup_peripherals(void)
                         GIO_INT_EDGE);
     GIO_DebounceCtrl(1, 200, GIO_DB_CLK_32K);
     GIO_DebounceEn(SWITCH_KEY_GPIO, 1);
-    PINCTRL_SetPadMux(PULSE_TEST_GPIO, IO_SOURCE_GPIO);
-    GIO_SetDirection(PULSE_TEST_GPIO, GIO_DIR_OUTPUT);
-    GIO_WriteValue(PULSE_TEST_GPIO, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO1, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO1, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO1, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO2, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO2, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO2, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO3, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO3, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO3, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO4, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO4, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO4, 0);
 }
 
 uint32_t on_lle_init(void *dummy, void *user_data)

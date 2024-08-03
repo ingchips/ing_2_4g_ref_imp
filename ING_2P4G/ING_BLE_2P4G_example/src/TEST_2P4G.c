@@ -34,7 +34,7 @@ void ing_2p4g_config_init(void)
     ing_2p4g_config.Mode          = MODE_SLAVE;
     ing_2p4g_config.AccAddr       = 0x3234567A;
     ing_2p4g_config.PHY           = LLE_PHY_1M;
-    ing_2p4g_config.Channel       = 2399;
+    ing_2p4g_config.Channel       = 2391;
     ing_2p4g_config.TXPOW         = 63;
     ing_2p4g_config.WhiteEn       = 0x1;
     ing_2p4g_config.WhiteIdx      = 0x0;

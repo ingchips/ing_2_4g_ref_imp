@@ -95,6 +95,19 @@ void setup_peripherals(void)
     GIO_SetDirection(PULSE_TEST_GPIO2, GIO_DIR_OUTPUT);
     GIO_WriteValue(PULSE_TEST_GPIO2, 0);
     
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO1, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO1, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO1, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO2, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO2, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO2, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO3, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO3, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO3, 0);
+    PINCTRL_SetPadMux(PULSE_TEST_GPIO4, IO_SOURCE_GPIO);
+    GIO_SetDirection(PULSE_TEST_GPIO4, GIO_DIR_OUTPUT);
+    GIO_WriteValue(PULSE_TEST_GPIO4, 0);
+    
     test_2p4g_timer_init();
 }
 

@@ -5,10 +5,11 @@
 #include "profile.h"
 #include "ing_2p4g.h"
 
-#define TIMER_RELOAD_TIME   5940
+//#define TIMER_RELOAD_TIME   5940
+#define TIMER_RELOAD_TIME   7940
 static comm_mode_t comm_mode = MODE_BLE;
 
-static uint8_t master_tx_len = 20;
+static uint8_t master_tx_len = MASTER_HOP_DATA_LEN;
 static uint8_t slave_tx_len = 4;
 static uint8_t tx_data[]={APP_2G4_DATA_CONNECT,5,4,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31}; 
 static uint8_t rx_data[256];
@@ -20,7 +21,7 @@ void ing24g_test_switch_mode_trigger(comm_mode_t mode);
 // static uint8_t app_2g4_timer_enable = 0; //0:tx at event cb; 1-tx at timer2 cb
 
 static app_2g4_ch_hop_t app_2g4_hop = {
-	.channel_hop = {2405, 2417, 2430, 2445, 2460},
+	.channel_hop = {2391, 2417, 2430, 2445, 2460},
 	.current_channel = 0,// 0-APP_2G4_HOP_CHANNEL_NUM
 	.hop_cnt = 0,
     .error_cnt = 0,
@@ -40,7 +41,7 @@ void app_2g4_init(void)
 
 // ================================================================================
 
-void gpio_pluse_num(uint16_t num)
+void gpio_pluse_num1(uint16_t num)
 {
     uint16_t i = 0;
     for(i=0; i<num; i++)
@@ -60,12 +61,32 @@ void gpio_pluse_num2(uint16_t num)
     }
 }
 
+void gpio_pluse_num3(uint16_t num)
+{
+    uint16_t i = 0;
+    for(i=0; i<num; i++)
+    {
+        GIO_WriteValue(PULSE_TEST_GPIO3, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO3, 0);
+    }
+}
+
+void gpio_pluse_num4(uint16_t num)
+{
+    uint16_t i = 0;
+    for(i=0; i<num; i++)
+    {
+        GIO_WriteValue(PULSE_TEST_GPIO4, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO4, 0);
+    }
+}
+
 void ing_2p4g_config_init(void)
 {
     ing_2p4g_config.Mode          = MODE_MASTER;
     ing_2p4g_config.AccAddr       = 0x3234567A;
     ing_2p4g_config.PHY           = LLE_PHY_1M;
-    ing_2p4g_config.Channel       = 2405;
+    ing_2p4g_config.Channel       = 2391;
     ing_2p4g_config.TXPOW         = 63;
     ing_2p4g_config.WhiteEn       = 0x1;
     ing_2p4g_config.WhiteIdx      = 0x0;
@@ -85,11 +106,14 @@ static uint32_t IRQHandler_TIMER2_INT(void* user_data)
     TMR_Enable(APB_TMR2, 0, 0);
     TMR_SetReload(APB_TMR2, 0, TIMER_RELOAD_TIME);   // 1ms 
     TMR_Enable(APB_TMR2, 0, 1);
-    gpio_pluse_num(1);
     ing2p4g_get_state(&state_2p4g);
     if((state_2p4g == ING2P4G_STATE_IDLE))
     {
+//        gpio_pluse_num1(1);
         ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
+    }
+    else{
+        gpio_pluse_num4(1);
     }
 
     // if(app_2g4_timer_enable == 1)
@@ -137,14 +161,30 @@ void ing24g_test_do_switch_to_BLE(void){
     ing2p4g_switch_to_BLE();
 }
 
+static void *master_2g4_tx_ustimer_cb(platform_us_timer_handle_t timer_handle, uint64_t time_us, void *param) {
+//	log_printf("[2G4]:t:%d %d\n", app_2g4_state.state, App_2p4g_heartbeat_interval);
+
+	platform_create_us_timer((platform_get_us_time() + 1000), master_2g4_tx_ustimer_cb, NULL);
+//    gpio_pluse_num1(4);
+    ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
+    return 0;
+}
+
+#define TX_USE_TIMER     1
 void continus_2g4_txrx_on(void)
 {
     continus_2g4 = 1;
-    TMR_SetReload(APB_TMR2, 0, TIMER_RELOAD_TIME*100);   // 100ms 
-    TMR_Enable(APB_TMR2, 0, 1);
+//    TMR_SetReload(APB_TMR2, 0, TIMER_RELOAD_TIME*100);   // 100ms 
+//    TMR_Enable(APB_TMR2, 0, 1);
     // app_2g4_timer_enable = 1;
     app_2g4_state.state = APP_2G4_STATE_CONNECT;
     app_2g4_channel_init();
+
+    #if TX_USE_TIMER
+    platform_create_us_timer((platform_get_us_time() + 10000), master_2g4_tx_ustimer_cb, NULL);
+    #else
+    ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
+    #endif
 }
 
 void continus_2g4_txrx_off(void)
@@ -283,7 +323,7 @@ void app_2g4_channel_hop_begin(void) {
     app_2g4_hop.hop_cnt = 0;
 	app_2g4_state.state = APP_2G4_STATE_FRE_HOPPING;
 	app_2g4_channel_hop();
-	master_tx_len = 1;
+	master_tx_len = MASTER_HOP_DATA_LEN;
 	tx_data[0]= APP_2G4_DATA_FRE_HOP;
 }
 
@@ -292,7 +332,7 @@ void app_2g4_channel_hop_stop(void) {
     app_2g4_hop.hop_cnt = 0;
 	app_2g4_state.state = APP_2G4_STATE_CONNECT;
 	app_2g4_channel_init();
-	master_tx_len = 1;
+	master_tx_len = MASTER_HOP_DATA_LEN;
 	tx_data[0]= APP_2G4_DATA_FRE_HOP;
 }
 
@@ -305,13 +345,13 @@ static void tx_ack_data_handle(ING2P4G_RxPacket *rx_packet) {
         case APP_2G4_STATE_CONNECT:{
             app_2g4_state.state = APP_2G4_STATE_COMMNUICATING;
             tx_data[0] = APP_2G4_DATA_COMMUNICATE;
-            master_tx_len = 32;
+            master_tx_len = MASTER_COM_DATA_LEN;
             break;
         }
 		case APP_2G4_STATE_COMMNUICATING:{
             app_2g4_hop.error_cnt = 0;
 			tx_data[0] = APP_2G4_DATA_COMMUNICATE;
-            master_tx_len = 32;
+            master_tx_len = MASTER_COM_DATA_LEN;
 			break;
 		}
 		case APP_2G4_STATE_FRE_HOPPING:{
@@ -319,7 +359,7 @@ static void tx_ack_data_handle(ING2P4G_RxPacket *rx_packet) {
             app_2g4_hop.hop_cnt = 0;
             app_2g4_state.state = APP_2G4_STATE_COMMNUICATING;
             tx_data[0] = APP_2G4_DATA_COMMUNICATE;
-            master_tx_len = 32;
+            master_tx_len = MASTER_COM_DATA_LEN;
             platform_printf("[2G4]hop success ch:%d\n", app_2g4_hop.current_channel);
 			break;
 		}
@@ -338,7 +378,7 @@ static void tx_noack_data_handle(ING2P4G_RxPacket *rx_packet) {
 		}
         case APP_2G4_STATE_CONNECT:{
             tx_data[0] = APP_2G4_DATA_CONNECT;
-            master_tx_len = 32;
+            master_tx_len = MASTER_COM_DATA_LEN;
             break;
         }
 		case APP_2G4_STATE_COMMNUICATING:{
@@ -352,7 +392,7 @@ static void tx_noack_data_handle(ING2P4G_RxPacket *rx_packet) {
 		}
 		case APP_2G4_STATE_FRE_HOPPING:{
             tx_data[0] = APP_2G4_DATA_FRE_HOP;
-            master_tx_len = 1;
+            master_tx_len = MASTER_HOP_DATA_LEN;
             app_2g4_hop.hop_cnt++;
             if(app_2g4_hop.hop_cnt > APP_2G4_HOP_STOP_NUM)
             {
@@ -375,15 +415,22 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
     if(!status) {
+//        gpio_pluse_num2(1);
 		tx_ack_data_handle(&RxPkt111);
 	}
     else {
-        gpio_pluse_num2(1);
+        gpio_pluse_num4(1);
+//        platform_printf("[2G4]Error:%d\n", status);
         tx_noack_data_handle(&RxPkt111);
     }
 
     if(continus_2g4 == 1)
     {
+        #if TX_USE_TIMER
+        #else
+        ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
+        #endif
+
         percent_cnt(1000, status, RxPkt111.RSSI);
     }
 }

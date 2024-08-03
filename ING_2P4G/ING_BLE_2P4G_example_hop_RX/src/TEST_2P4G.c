@@ -16,7 +16,7 @@ static uint8_t continus_2g4 = 0;
 void ing24g_test_switch_mode_trigger(comm_mode_t mode);
 
 static app_2g4_ch_hop_t app_2g4_hop = {
-	.channel_hop = {2405, 2417, 2430, 2445, 2460},
+	.channel_hop = {2391, 2417, 2430, 2445, 2460},
 	.current_channel = 0,// 0-APP_2G4_HOP_CHANNEL_NUM
 	.hop_cnt = 0,
     .error_cnt = 0,
@@ -28,21 +28,52 @@ static app_2g4_state_t app_2g4_state ={
 
 // ================================================================================
 
-void gpio_pluse_num(uint16_t num)
+void gpio_pluse_num1(uint16_t num)
 {
     uint16_t i = 0;
     for(i=0; i<num; i++)
     {
-        GIO_WriteValue(PULSE_TEST_GPIO, 1);
-        GIO_WriteValue(PULSE_TEST_GPIO, 0);
+        GIO_WriteValue(PULSE_TEST_GPIO1, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO1, 0);
     }
 }
+
+void gpio_pluse_num2(uint16_t num)
+{
+    uint16_t i = 0;
+    for(i=0; i<num; i++)
+    {
+        GIO_WriteValue(PULSE_TEST_GPIO2, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO2, 0);
+    }
+}
+
+void gpio_pluse_num3(uint16_t num)
+{
+    uint16_t i = 0;
+    for(i=0; i<num; i++)
+    {
+        GIO_WriteValue(PULSE_TEST_GPIO3, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO3, 0);
+    }
+}
+
+void gpio_pluse_num4(uint16_t num)
+{
+    uint16_t i = 0;
+    for(i=0; i<num; i++)
+    {
+        GIO_WriteValue(PULSE_TEST_GPIO4, 1);
+        GIO_WriteValue(PULSE_TEST_GPIO4, 0);
+    }
+}
+
 void ing_2p4g_config_init(void)
 {
     ing_2p4g_config.Mode          = MODE_SLAVE;
     ing_2p4g_config.AccAddr       = 0x3234567A;
     ing_2p4g_config.PHY           = LLE_PHY_1M;
-    ing_2p4g_config.Channel       = 2405;
+    ing_2p4g_config.Channel       = 2391;
     ing_2p4g_config.TXPOW         = 63;
     ing_2p4g_config.WhiteEn       = 0x1;
     ing_2p4g_config.WhiteIdx      = 0x0;
@@ -146,7 +177,7 @@ void ing24g_test_switch_mode_handler(void)
         {
             platform_printf("Start to RX ...\r\n");
 //            ing2p4g_start_2p4g_rx(slave_tx_len, tx_data);
-            ing2p4g_start_2p4g_rx_with_timeout(slave_tx_len, tx_data, 0, ing_2p4g_config.TimeOut);
+            ing2p4g_start_2p4g_rx_with_timeout(slave_tx_len, tx_data, 1, ing_2p4g_config.TimeOut);
         }
 
     }
@@ -274,12 +305,13 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
 
     if(!status) {
 		rx_ack_data_handle(&RxPkt111);
+//        gpio_pluse_num1(1);
 	}
     else {
         rx_noack_data_handle(&RxPkt111);
+//        gpio_pluse_num2(1);
     }
     
-    gpio_pluse_num(1);
     
     if(continus_2g4 == 1)
     {
