@@ -12,7 +12,7 @@
 #include "btstack_mt.h"
 #include "port_gen_os_driver.h"
 
-#include "../2P4G/ing_2p4g.h"
+#include "ing_2p4g.h"
 #include "TEST_2P4G.h"
 
 #define GEN_OS          ((const gen_os_driver_t *)platform_get_gen_os_driver())

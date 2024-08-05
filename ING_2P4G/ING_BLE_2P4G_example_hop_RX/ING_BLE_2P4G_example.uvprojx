@@ -339,7 +339,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../sdk/bundles/extension/inc;../sdk/bundles/extension/inc/os;../sdk/src/BSP;../sdk/src/FWlib;../sdk/src/StartUP/ing916;../sdk/src/Tools;../sdk/src;.\src;.\2P4G</IncludePath>
+              <IncludePath>../sdk/bundles/extension/inc;../sdk/bundles/extension/inc/os;../sdk/src/BSP;../sdk/src/FWlib;../sdk/src/StartUP/ing916;../sdk/src/Tools;../sdk/src;.\src;..\..\lib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -556,7 +556,7 @@
             <File>
               <FileName>BLE_2P4G_Switch.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>.\2P4G\BLE_2P4G_Switch.lib</FilePath>
+              <FilePath>..\..\lib\BLE_2P4G_Switch.lib</FilePath>
             </File>
           </Files>
         </Group>
