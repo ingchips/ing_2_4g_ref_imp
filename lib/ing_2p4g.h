@@ -23,7 +23,7 @@ typedef enum
 
 #define MAX_RX_PAYLOAD_LEN  255
 
-#define ING_2P4G_VER   1.0.1
+#define ING_2P4G_VER   1.0.2
 
 
 typedef enum
@@ -445,8 +445,30 @@ void RSSI_SET_LISTEN_WINDOW(uint32_t size);
 
 void ing24g_rf_stop(void);
 
+/**
+ ****************************************************************************************
+ * @brief disable/enable the tx of RF
+ *
+ * @param[in]   enable           0:disable tx  1:enable tx
+ *
+ * @return                     The result of setting:
+ *                             ING2P4G_SUCCESS         : success
+ *                             ING2P4G_MODE_ERROR      : failed, It is not in 2.4G mode.
+ * note: the function could be used only in 2.4G mode.
+ *              For SLAVE, when disable tx, the device can receive the packet from MASTER, but could not send ack.
+ *              For MASTER, when disable tx,the device can't send packet to slave.
+ *              This function can be used when you do not want ACK from SLAVE.
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_rf_tx_set(uint8_t enable);
+
+
 void ing2p4g_lle_rst(void);
 void ing2p4g_lle_init(void);
+
+uint16_t LLE_SPI_READ(uint16_t addr);
+ADDITIONAL_ATTRIBUTE void LLE_SPI_WRITE(uint16_t addr, uint16_t data);
+
 
 
 #endif
