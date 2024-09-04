@@ -164,7 +164,7 @@ ing2p4g_status_t ing2p4g_set_rx_timeout(uint32_t time_out);
 /**
  ****************************************************************************************
  * @brief start a RX event for ing2.4g slave, and set the ack data
- * @note  make sure the work mode of 2.4g is MODE_MASETR, or you can set it by ing2p4g_set_2g4_work_mode
+ * @note  make sure the work mode of 2.4g is MODE_SLAVE, or you can set it by ing2p4g_set_2g4_work_mode
  * 
  * @param[in] len              The length of the ack data, should be less than MAX_RX_PAYLOAD_LEN
  *                             if greater than MAX_RX_PAYLOAD_LEN, set to MAX_RX_PAYLOAD_LEN
@@ -182,7 +182,7 @@ ing2p4g_status_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
 /**
  ****************************************************************************************
  * @brief start a RX event for ing2.4g slave, and set the ack data
- * @note  make sure the work mode of 2.4g is MODE_MASETR, or you can set it by ing2p4g_set_2g4_work_mode
+ * @note  make sure the work mode of 2.4g is MODE_SLAVE, or you can set it by ing2p4g_set_2g4_work_mode
  * 
  * @param[in] len              The length of ack data, should be less than MAX_RX_PAYLOAD_LEN
  *                             if greater than MAX_RX_PAYLOAD_LEN, set to MAX_RX_PAYLOAD_LEN
