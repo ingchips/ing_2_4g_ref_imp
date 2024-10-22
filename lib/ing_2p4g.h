@@ -3,6 +3,7 @@
 #define ING__2P4G__H
 #include "stdint.h"
 #include "ing_ram_code.h"
+#include "struct_2p4g.h"
 
 typedef enum
 {
@@ -469,6 +470,6 @@ void ing2p4g_lle_init(void);
 uint16_t LLE_SPI_READ(uint16_t addr);
 ADDITIONAL_ATTRIBUTE void LLE_SPI_WRITE(uint16_t addr, uint16_t data);
 
-
+ADDITIONAL_ATTRIBUTE void SetCont_rx_int(ING2P4G_TxPacketBuffer_S *TxPacketBuffer);
 
 #endif

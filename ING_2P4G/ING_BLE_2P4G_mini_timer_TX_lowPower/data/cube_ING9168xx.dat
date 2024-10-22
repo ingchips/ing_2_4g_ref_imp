@@ -1,0 +1,8 @@
+[ingCube][init]
+
+UART0=enableClk=1,baud=115200,pinTx=1,wlen=3,parity=0,fifoEn=1,rxEn=0,txEn=1,stopBits=0,useCts=0,useRts=0,enableRxIRQ=0,enableTxIRQ=0,txFifoLevel=1,rxFifoLevel=1,
+
+
+
+
+
