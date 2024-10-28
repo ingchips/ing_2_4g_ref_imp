@@ -3,7 +3,6 @@
 #define ING__2P4G__H
 #include "stdint.h"
 #include "ing_ram_code.h"
-#include "struct_2p4g.h"
 
 typedef enum
 {
@@ -24,8 +23,6 @@ typedef enum
 
 #define MAX_RX_PAYLOAD_LEN  255
 
-#define ING_2P4G_VER   1.0.3
-
 
 typedef enum
 {
@@ -43,6 +40,8 @@ typedef enum
     
     //Transmit callback
     ING2P4G_CB_TX,
+    //Access address match
+    ING2P4G_CB_ACCMATCH,
 
     ING2P4G_CB_EVT_MAX
 } ing2p4g_callback_type_t;
@@ -78,6 +77,7 @@ typedef struct
     uint32_t  TimeOut;          /* <=> Slave rx timeout, 14Bits, Unit 625us */
     uint8_t   RxPktIntEn;       /* <=> Rx packet intterupt enable */
     uint8_t   TxPktIntEn;       /* <=> Tx packet intterupt enable */
+    uint8_t   AccMatchIntEn;    /* <=> Tx packet intterupt enable */
     uint16_t  RxSyncWindow;     /* <=> Rx fine synchronizing window, 0~1023, (39 + win / 2)us*/
 } ING2P4G_Config_t;
 
@@ -102,7 +102,7 @@ void ing2p4g_set_irq_callback(ing2p4g_callback_type_t type, f_ing2p4g_cb f);
 
 /**
  ****************************************************************************************
- * @brief clear the rx interrupt flag, used int the callback of rx interrupt
+ * @brief clear the rx interrupt flag, used in the callback of rx interrupt
  *
  * @return                     The status of communication
  *                             ING2P4G_SUCCESS          : clear interrupt ok
@@ -113,7 +113,7 @@ ing2p4g_status_t ing2p4g_clear_rx_int(void);
 
 /**
  ****************************************************************************************
- * @brief clear the tx interrupt flag, used int the callback of tx interrupt
+ * @brief clear the tx interrupt flag, used in the callback of tx interrupt
  *
  * @return                     The status of communication
  *                             ING2P4G_SUCCESS          : clear interrupt ok
@@ -121,6 +121,17 @@ ing2p4g_status_t ing2p4g_clear_rx_int(void);
  ****************************************************************************************
  */
 ing2p4g_status_t ing2p4g_clear_tx_int(void);
+
+/**
+ ****************************************************************************************
+ * @brief clear the acc match interrupt flag, used in the callback of acc match interrupt
+ *
+ * @return                     The status of communication
+ *                             ING2P4G_SUCCESS          : clear interrupt ok
+ *                             ING2P4G_MODE_ERROR       : failed, It is not in 2.4G mode.
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_clear_accmatch_int(void);
 
 /**
  ****************************************************************************************
@@ -463,13 +474,34 @@ void ing24g_rf_stop(void);
  */
 ing2p4g_status_t ing2p4g_rf_tx_set(uint8_t enable);
 
-
-void ing2p4g_lle_rst(void);
+/**
+ ****************************************************************************************
+ * @brief init lle when wakeup
+ *
+ * note: after wakeup, lle should be init before use
+ ****************************************************************************************
+ */
 void ing2p4g_lle_init(void);
 
-uint16_t LLE_SPI_READ(uint16_t addr);
-ADDITIONAL_ATTRIBUTE void LLE_SPI_WRITE(uint16_t addr, uint16_t data);
+/**
+ ****************************************************************************************
+ * @brief set the ack data at RX callback, just for SLAVE.
+ *
+ * @param[in] data             The pointer to the ack data
+ *
+ * note: However, only the data content can be adjusted, the data length cannot be changed. 
+         The data length is still the value when RX is started.
+ ****************************************************************************************
+ */
+void SetCont_rx_int(uint8_t *data);
 
-ADDITIONAL_ATTRIBUTE void SetCont_rx_int(ING2P4G_TxPacketBuffer_S *TxPacketBuffer);
+
+/**
+ ****************************************************************************************
+ * @brief print the version of the lib.
+ *
+ ****************************************************************************************
+ */
+void mon_print_ver(void);
 
 #endif

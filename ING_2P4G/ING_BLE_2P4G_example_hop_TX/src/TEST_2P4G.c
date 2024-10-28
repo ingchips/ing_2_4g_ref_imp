@@ -415,12 +415,10 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
     if(!status) {
-//        gpio_pluse_num2(1);
 		tx_ack_data_handle(&RxPkt111);
 	}
     else {
         gpio_pluse_num4(1);
-//        platform_printf("[2G4]Error:%d\n", status);
         tx_noack_data_handle(&RxPkt111);
     }
 
