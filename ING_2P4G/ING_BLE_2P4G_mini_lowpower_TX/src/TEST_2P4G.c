@@ -163,22 +163,101 @@ void ing24g_test_do_switch_to_2p4g(void){
 }
 
 void ing24g_test_do_switch_to_BLE(void){
+    platform_printf("DO SWITCH BLE.\n");
     platform_config(PLATFORM_CFG_LL_DBG_FLAGS, 0x10);
     ing2p4g_switch_to_ble_mode_start();
     ing2p4g_switch_to_BLE();
 }
 
-static void *master_2g4_tx_ustimer_cb(platform_us_timer_handle_t timer_handle, uint64_t time_us, void *param) {
 
-	platform_create_us_timer((platform_get_us_time() + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
+extern void rtc_wakeup_interrupt_set(uint8_t en);
+extern uint8_t rtc_wakeup_interrupt_get(void);
+extern uint32_t rtc_wakeup_interrupt_compare_counter_get(void);
+
+    
+static uint64_t test_total_count = 0;
+static uint64_t test_tx_interval = 1000000;
+static uint16_t test_cnt = 0;
+static platform_us_timer_handle_t us_timer_handle = 0;
+
+#if 1
+static void *master_2g4_tx_ustimer_cb(platform_us_timer_handle_t timer_handle, uint64_t time_us, void *param);
+void set_us_timer_callback(void *data, uint16_t data_len)
+{
+    test_total_count = (platform_get_us_time() + test_tx_interval);
+	
+    printf("nt:%08x, absTime:%lld, us:%lld, cnt:%lld\n", rtc_wakeup_interrupt_compare_counter_get(), test_total_count, test_tx_interval, test_tx_interval/30);
+    
+    if (test_cnt < 5)
+    {
+        test_cnt++;
+        us_timer_handle = platform_create_us_timer(test_total_count, master_2g4_tx_ustimer_cb, NULL);
+    }
+//    if(test_cnt == 1){
+//        test_cnt++;
+//        test_tx_interval = 4294967296+5000000;
+//        
+////        platform_cancel_us_timer(us_timer_handle);
+//    } else if(test_cnt == 2){
+//        printf("set fffff\n");
+//    } else {
+//        test_cnt++;
+//        test_tx_interval += 100000;
+//    }
+    
 //    gpio_pluse_num1(4);
+    #if 0
     ing2p4g_lle_init();
     ing2p4g_status_t status = ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
     app_2g4_rf_going = 1;
+    #endif
+//    platform_printf("[2G4]:timer tx:%d\n", status);
+    return;
+}
+
+static void *master_2g4_tx_ustimer_cb(platform_us_timer_handle_t timer_handle, uint64_t time_us, void *param) {
+
+    btstack_push_user_runnable(set_us_timer_callback, NULL, 0);
+    
+    return 0;
+    
+}
+
+#else
+
+static void *master_2g4_tx_ustimer_cb(platform_us_timer_handle_t timer_handle, uint64_t time_us, void *param) {    
+    
+//	platform_create_us_timer((platform_get_us_time() + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
+    test_total_count = (time_us + test_tx_interval);
+	us_timer_handle = platform_create_us_timer(test_total_count, master_2g4_tx_ustimer_cb, NULL);
+    uint32_t int_reg_cnt_tgt = *(uint32_t *)0x40102004;
+    printf("nt:%08x, absTime:%lld, us:%lld, cnt:%lld\n", int_reg_cnt_tgt, test_total_count, test_tx_interval, test_tx_interval/30);
+    
+    if(test_cnt == 1){
+        test_cnt++;
+        test_tx_interval = 4294967296+5000000;
+        
+//        platform_cancel_us_timer(us_timer_handle);
+    } else if(test_cnt == 2){
+        printf("set fffff\n");
+    } else {
+        test_cnt++;
+        test_tx_interval += 100000;
+    }
+    
+//    gpio_pluse_num1(4);
+    #if 0
+    ing2p4g_lle_init();
+    ing2p4g_status_t status = ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
+    app_2g4_rf_going = 1;
+    #endif
 //    platform_printf("[2G4]:timer tx:%d\n", status);
     return 0;
 }
+#endif
 
+
+    
 #define TX_USE_TIMER     1
 void continus_2g4_txrx_on(void)
 {
@@ -190,7 +269,10 @@ void continus_2g4_txrx_on(void)
 //    app_2g4_channel_init();
 
     #if TX_USE_TIMER
-    platform_create_us_timer((platform_get_us_time() + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
+//    platform_create_us_timer((platform_get_us_time() + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
+    us_timer_handle = platform_create_us_timer((platform_get_us_time() + test_tx_interval), master_2g4_tx_ustimer_cb, NULL);
+    
+    printf("st:%08x\n", rtc_wakeup_interrupt_compare_counter_get());
     #else
     ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
     #endif

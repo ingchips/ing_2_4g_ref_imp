@@ -19,7 +19,7 @@
 #define MASTER_HOP_DATA_LEN       1
 #define MASTER_COM_DATA_LEN       32
 
-#define TEST_TX_INTERVAL          250000
+#define TEST_TX_INTERVAL          5000000000
 typedef struct
 {
     uint16_t     channel_hop[APP_2G4_HOP_CHANNEL_NUM];

@@ -241,14 +241,12 @@ static int att_write_callback(hci_con_handle_t connection_handle, uint16_t att_h
     }
 }
 
-
-
 static void user_msg_handler(uint32_t msg_id, void *data, uint16_t size)
 {
     switch (msg_id)
     {
-    default:
-        ;
+        default:
+            ;
     }
 }
 
@@ -289,7 +287,8 @@ static void user_packet_handler(uint8_t packet_type, uint16_t channel, const uin
             break;
         
 //        setup_adv();
-        ing24g_test_do_switch_to_2p4g();
+//        ing24g_test_do_switch_to_2p4g();
+        continus_2g4_txrx_on();
         break;
 
     case HCI_EVENT_COMMAND_COMPLETE:
