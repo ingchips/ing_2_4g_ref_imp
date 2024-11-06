@@ -424,7 +424,7 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
     if(status == 0) {
-        app_2g4_channel_hop();
+//        app_2g4_channel_hop();
         gpio_pluse_num2(1);
 //		tx_ack_data_handle(&RxPkt111);
         if((platform_get_us_time() - print_time_last) > TEST_RSSI_PRINT_INTERVAL)

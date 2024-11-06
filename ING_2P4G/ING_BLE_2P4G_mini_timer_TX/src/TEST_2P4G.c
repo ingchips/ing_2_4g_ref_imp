@@ -422,14 +422,15 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     ing2p4g_get_2g4_work_mode(&mode);
     ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
-    app_2g4_channel_hop();
+//    app_2g4_channel_hop();
     if(status == 0) {
         gpio_pluse_num3(1);
         // app_2g4_channel_hop();
 //		tx_ack_data_handle(&RxPkt111);
         if((platform_get_us_time() - print_time_last) > TEST_RSSI_PRINT_INTERVAL)
         {
-            platform_printf("TX RSSI:%d, ch:%d\n", RxPkt111.RSSI, app_2g4_hop.current_channel);
+//            platform_printf("TX RSSI:%d, ch:%d\n", RxPkt111.RSSI, app_2g4_hop.current_channel);
+            platform_printf("%d\n", RxPkt111.RSSI);
             print_time_last = platform_get_us_time();
         }
 	}

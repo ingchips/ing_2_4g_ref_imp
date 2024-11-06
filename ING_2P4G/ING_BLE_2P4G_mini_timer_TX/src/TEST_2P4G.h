@@ -16,7 +16,7 @@
 #define MASTER_COM_DATA_LEN       2
 
 #define TEST_TX_INTERVAL          8000
-#define TEST_RSSI_PRINT_INTERVAL  60000
+#define TEST_RSSI_PRINT_INTERVAL  300000
 
 //0:not use timer  1:use us timer  2:use hardware timer
 #define TX_USE_TIMER     2
