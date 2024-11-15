@@ -4,6 +4,9 @@
 #include "stdint.h"
 #include "ing_ram_code.h"
 
+/*********************************** */
+//Version:   "V1.1.0"
+/*********************************** */
 typedef enum
 {
     MODE_BLE,
@@ -157,6 +160,16 @@ ing2p4g_status_t ing2p4g_clear_event_int(void);
  ****************************************************************************************
  */
 ing2p4g_status_t ing2p4g_get_rx_data(ING2P4G_RxPacket *rx_packet);
+/**
+ ****************************************************************************************
+ * @brief get the communication state, without data
+ *
+ * @return                     The status of communication
+ *                             ING2P4G_SUCCESS          : communication ok
+ *                             other                    : failed, see ing2p4g_status_t
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_get_rx_state(void);
 
 /**
  ****************************************************************************************
@@ -193,6 +206,19 @@ ing2p4g_status_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
 
 /**
  ****************************************************************************************
+ * @brief start a RX event without ack for ing2.4g slave
+ * @note  make sure the work mode of 2.4g is MODE_SLAVE, or you can set it by ing2p4g_set_2g4_work_mode
+ *
+ * @retrun                     The result of RX:
+ *                             ING2P4G_SUCCESS          : rx success
+ *                             ING2P4G_MODE_ERROR       : failed, It is not in 2.4G mode.
+ *                             ING2P4G_ERROR_TX_GOING   : failed, for the device is in TX state now
+ *                             ING2P4G_ERROR_RX_GOING   : failed, for the device is in RX state now
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_start_2p4g_rx_noack(void);
+/**
+ ****************************************************************************************
  * @brief start a RX event for ing2.4g slave, and set the ack data
  * @note  make sure the work mode of 2.4g is MODE_SLAVE, or you can set it by ing2p4g_set_2g4_work_mode
  * 
@@ -212,6 +238,24 @@ ing2p4g_status_t ing2p4g_start_2p4g_rx(uint8_t len, uint8_t *data);
  ****************************************************************************************
  */
 ing2p4g_status_t ing2p4g_start_2p4g_rx_with_timeout(uint8_t len, uint8_t *data, uint8_t timeout_mode, uint32_t timeout);
+/**
+ ****************************************************************************************
+ * @brief start a RX event without ack for ing2.4g slave
+ * @note  make sure the work mode of 2.4g is MODE_SLAVE, or you can set it by ing2p4g_set_2g4_work_mode
+ * 
+ * @param[in] timeout_mode     1-wide mode, timeout is larger than 625us, the unit of timeout is 625us
+ *                             0-normal mode, timeout is 1-625us, the unit of timeout is 1us
+ * @param[in] timeout          when in wide mode, timeout: 0-100000, when lagrer than 100000, set to 100000
+ *                             when in timeout mode, timeout: 0-624, when lagrer than 624, set to 624
+ *
+ * @retrun                     The result of RX:
+ *                             ING2P4G_SUCCESS          : rx success
+ *                             ING2P4G_MODE_ERROR       : failed, It is not in 2.4G mode.
+ *                             ING2P4G_ERROR_TX_GOING   : failed, for the device is in TX state now
+ *                             ING2P4G_ERROR_RX_GOING   : failed, for the device is in RX state now
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_start_2p4g_rx_noack_timeout(uint8_t timeout_mode, uint32_t timeout);
 
 /**
  ****************************************************************************************
@@ -230,6 +274,23 @@ ing2p4g_status_t ing2p4g_start_2p4g_rx_with_timeout(uint8_t len, uint8_t *data, 
  ****************************************************************************************
  */
 ing2p4g_status_t ing2p4g_start_2p4g_tx(uint8_t len, uint8_t *data);
+/**
+ ****************************************************************************************
+ * @brief start a TX event for master, it will not wait for the ack.
+ * @note  make sure the work mode of 2.4g is MODE_MASETR, or you can set it by ing2p4g_set_2g4_work_mode
+ * 
+ * @param[in] len              The length of the ack data, must be less than MAX_RX_PAYLOAD_LEN
+ *                             if greater than MAX_RX_PAYLOAD_LEN, set to MAX_RX_PAYLOAD_LEN
+ * @param[in] data             The pointer to the ack data
+ *
+ * @retrun                     The result of TX:
+ *                             ING2P4G_SUCCESS          : tx success
+ *                             ING2P4G_MODE_ERROR       : failed, It is not in 2.4G mode.
+ *                             ING2P4G_ERROR_TX_GOING   : failed, for the device is in TX state now
+ *                             ING2P4G_ERROR_RX_GOING   : failed, for the device is in RX state now
+ ****************************************************************************************
+ */
+ing2p4g_status_t ing2p4g_start_2p4g_tx_noack(uint8_t len, uint8_t *data);
 
 /**
  ****************************************************************************************
@@ -450,7 +511,7 @@ void RSSI_SET_LISTEN_WINDOW(uint32_t size);
  *
  * note: be careful to use this function. after you call it:
  *              1)the tx interrupt/rx interrupt is disabled(ing_2p4g_config.RxPktIntEn = 0;ing_2p4g_config.TxPktIntEn    = 0;)
- *              2)the whiten is enable£¨ing_2p4g_config.WhiteEn = 0x1;£©
+ *              2)the whiten is enable(ing_2p4g_config.WhiteEn = 0x1;)
  *              which are the normally config. If you want to enable teh tx/rx interrupt or disable whiteEn, must call function ing2p4g_lle_set_parameter
  ****************************************************************************************
  */
