@@ -13,9 +13,9 @@
 #define APP_2G4_DATA_FRE_HOP 			    0xA5
 
 #define MASTER_HOP_DATA_LEN       1
-#define MASTER_COM_DATA_LEN       2
+#define MASTER_COM_DATA_LEN       15
 
-#define TEST_TX_INTERVAL          8000
+#define TEST_TX_INTERVAL          800000
 #define TEST_RSSI_PRINT_INTERVAL  200000
 
 //0:not use timer  1:use us timer  2:use hardware timer

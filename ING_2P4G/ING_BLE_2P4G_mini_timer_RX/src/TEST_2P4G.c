@@ -11,8 +11,9 @@
 static comm_mode_t comm_mode = MODE_BLE;
 
 static uint8_t master_tx_len = MASTER_COM_DATA_LEN;
-static uint8_t slave_tx_len = 4;
-static uint8_t tx_data[]={APP_2G4_DATA_CONNECT,5,4,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31}; 
+static uint8_t slave_tx_len = 10;
+static uint8_t tx_data[]={0,5,4,2,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31}; 
+static uint8_t tx_data1[]={1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}; 
 static uint8_t rx_data[256];
 static ING2P4G_RxPacket RxPkt111;
 static ING2P4G_Config_t ing_2p4g_config;
@@ -100,7 +101,7 @@ void ing_2p4g_config_init(void)
     ing_2p4g_config.WhiteIdx      = 0x0;
     ing_2p4g_config.CRCInit       = 0x123456;
     ing_2p4g_config.TimeOut       = 500;//*6.25us
-    ing_2p4g_config.RxPktIntEn    = 0;
+    ing_2p4g_config.RxPktIntEn    = 1;
     ing_2p4g_config.TxPktIntEn    = 0;
 }
 
@@ -424,14 +425,20 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
 
     if(status == 0) {
+        platform_printf("SLAVE Rx %d data:", RxPkt111.DataLen);
+        for(uint16_t i=0; i<RxPkt111.DataLen; i++)
+        {
+            platform_printf("%d ", RxPkt111.Data[i]);
+        }
+        platform_printf("\n");
 //        app_2g4_channel_hop();
         gpio_pluse_num2(1);
 //		tx_ack_data_handle(&RxPkt111);
-        if((platform_get_us_time() - print_time_last) > TEST_RSSI_PRINT_INTERVAL)
-        {
-            platform_printf("TX RSSI:%d, ch:%d\n", RxPkt111.RSSI, app_2g4_hop.current_channel);
-            print_time_last = platform_get_us_time();
-        }
+//        if((platform_get_us_time() - print_time_last) > TEST_RSSI_PRINT_INTERVAL)
+//        {
+//            platform_printf("TX RSSI:%d, ch:%d\n", RxPkt111.RSSI, app_2g4_hop.current_channel);
+////            print_time_last = platform_get_us_time();
+//        }
 	}
     else if(status == 2){
         gpio_pluse_num3(1);
@@ -462,8 +469,13 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
 
 static void RxPktIrqCallBack(void)
 {
-    //ing2p4g_err_bit_pos_t status = ing2p4g_get_rx_data(&RxPkt111);
+    ing2p4g_status_t status = ing2p4g_get_rx_data(&RxPkt111);
     ing2p4g_clear_rx_int();
+    if(RxPkt111.Data[0]%2)
+    {
+        SetCont_rx_int(tx_data1, 16);
+    }
+    
 }
 
 ADDITIONAL_ATTRIBUTE static void TxPktIrqCallBack(void)

@@ -5,7 +5,7 @@
 #include "ing_ram_code.h"
 
 /*********************************** */
-//Version:   "V1.1.0"
+//Version:   "V1.1.1"
 /*********************************** */
 typedef enum
 {
@@ -549,12 +549,13 @@ void ing2p4g_lle_init(void);
  * @brief set the ack data at RX callback, just for SLAVE.
  *
  * @param[in] data             The pointer to the ack data
+ * @param[in] len              the length of data
  *
- * note: However, only the data content can be adjusted, the data length cannot be changed. 
-         The data length is still the value when RX is started.
+ * note: only the data content can be adjusted, the data length cannot be changed. 
+         the actual length is what set at ing2p4g_start_2p4g_rx or ing2p4g_start_2p4g_rx_with_timeout.
  ****************************************************************************************
  */
-void SetCont_rx_int(uint8_t *data);
+void SetCont_rx_int(uint8_t *data, uint8_t len);
 
 
 /**
