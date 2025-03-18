@@ -71,10 +71,6 @@ void config_uart(uint32_t freq, uint32_t baud)
 void setup_peripherals(void)
 {
     config_uart(OSC_CLK_FREQ, 115200);
-    if(2 == TX_USE_TIMER)
-    {
-        test_2p4g_timer_init();
-    }
 
     SYSCTRL_ClearClkGateMulti(  (1 << SYSCTRL_ClkGate_APB_GPIO0)
                               | (1 << SYSCTRL_ClkGate_APB_PinCtrl)
@@ -106,6 +102,7 @@ uint32_t on_deep_sleep_wakeup(void *dummy, void *user_data)
     (void)(dummy);
     (void)(user_data);
     setup_peripherals();
+    gpio_pluse_num1(1);
     platform_printf("Wake up\n");
     return 0;
 }
@@ -115,10 +112,10 @@ uint32_t query_deep_sleep_allowed(void *dummy, void *user_data)
     (void)(dummy);
     (void)(user_data);
     // TODO: return 0 if deep sleep is not allowed now; else deep sleep is allowed
-    // return !(app_2g4_rf_state());
-    // return PLATFORM_ALLOW_DEEP_SLEEP;
+    gpio_pluse_num4(1);
     while(apUART_Check_TXFIFO_EMPTY(PRINT_PORT) == 0);
-    return PLATFORM_ALLOW_DEEP_SLEEP;
+    return !(app_2g4_rf_state());
+    // return PLATFORM_ALLOW_DEEP_SLEEP;
 }
 
 trace_rtt_t trace_ctx = {0};
@@ -163,13 +160,14 @@ int app_main()
     SYSCTRL_Init();
     // setup event handlers
     platform_set_evt_callback_table(&evt_cb_table);
-
-    // platform_config(PLATFORM_CFG_POWER_SAVING, PLATFORM_CFG_ENABLE);    
+ 
     setup_peripherals();
 
     trace_rtt_init(&trace_ctx);
     // TODO: config trace mask
     platform_config(PLATFORM_CFG_TRACE_MASK, 0);
+    
+    platform_config(PLATFORM_CFG_LL_DBG_FLAGS, 32);
     ing2p4g_init_dual_mode();
     ing24g_test_init();
     SYSCTRL_SelectMemoryBlocks(SYSCTRL_RESERVED_MEM_BLOCKS);
