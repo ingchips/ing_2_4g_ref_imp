@@ -15,7 +15,7 @@
 #define MASTER_HOP_DATA_LEN       1
 #define MASTER_COM_DATA_LEN       2
 
-#define TEST_TX_INTERVAL          1000*1000
+#define TEST_TX_INTERVAL          400
 #define TEST_RSSI_PRINT_INTERVAL  60000
 
 

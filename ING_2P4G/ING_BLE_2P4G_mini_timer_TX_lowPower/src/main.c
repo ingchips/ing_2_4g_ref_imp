@@ -103,7 +103,7 @@ uint32_t on_deep_sleep_wakeup(void *dummy, void *user_data)
     (void)(user_data);
     setup_peripherals();
     gpio_pluse_num1(1);
-    platform_printf("Wake up\n");
+//    platform_printf("Wake up\n");
     return 0;
 }
 

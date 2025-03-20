@@ -113,7 +113,8 @@ static void *master_2g4_tx_ustimer_cb(platform_us_timer_handle_t timer_handle, u
 
     status = ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
     platform_create_us_timer((platform_get_us_time() + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
-    platform_printf("[2G4]:timer tx:%d\n", status);
+//    platform_create_us_timer((time_us + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
+//    platform_printf("[2G4]:timer tx:%d\n", status);
     return 0;
 }
 
@@ -122,7 +123,7 @@ void continus_2g4_txrx_on(void)
     continus_2g4 = 1;
 //    app_2g4_channel_init();
     platform_create_us_timer((platform_get_us_time() + TEST_TX_INTERVAL), master_2g4_tx_ustimer_cb, NULL);
-    ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
+//    ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
 }
 
 void continus_2g4_txrx_off(void)
