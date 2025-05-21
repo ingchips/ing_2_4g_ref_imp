@@ -1,12 +1,14 @@
 listing/
 output/
 RTE/
+.cache/
 JLinkLog.txt
 *.uvgui.*
 *.uvguix.*
 *.uvoptx
 *.dep
 *.scvd
+*.json
 
 # Prerequisites
 *.d
