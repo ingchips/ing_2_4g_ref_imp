@@ -510,24 +510,26 @@ void RSSI_SET_LISTEN_WINDOW(uint32_t size);
  * @brief stop the current tx/rx rf event
  *
  * note: be careful to use this function. after you call it:
- *              1)the tx interrupt/rx interrupt is disabled(ing_2p4g_config.RxPktIntEn = 0;ing_2p4g_config.TxPktIntEn    = 0;)
- *              2)the whiten is enable(ing_2p4g_config.WhiteEn = 0x1;)
- *              which are the normally config. If you want to enable teh tx/rx interrupt or disable whiteEn, must call function ing2p4g_lle_set_parameter
+ *              1)the whiten is enable(ing_2p4g_config.WhiteEn = 0x1);
+ *              2)if a timer create by platform_create_us_timer is running, the timer is disabled. make sure not to use 
+ *              ing24g_rf_stop when a timer is running.
  ****************************************************************************************
  */
-
 void ing24g_rf_stop(void);
 
 /**
  ****************************************************************************************
- * @brief rf stop for test
+ * @brief cancel the ack of slave at RX interrupt
  *
- * note: 
+ * note:this function is used to cancel the ack of slave at RX interrupt. 
+        It can only be used in this kind of situation:
+            1)slave RX
+            2)at callback of RX interrupt
+            3)called when rx is received, is no rx data received, 
+            4)Call it as soon as the RX interrupt occurs, preferably within 60 microseconds.
  ****************************************************************************************
  */
 void ing24g_slave_stop_ack(void);
-
-ADDITIONAL_ATTRIBUTE void ing24g_rf_stop_safe_event(void);
 
 /**
  ****************************************************************************************
