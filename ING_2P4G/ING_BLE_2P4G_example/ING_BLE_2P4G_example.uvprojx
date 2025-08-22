@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../sdk/bundles/extension/inc;../sdk/bundles/extension/inc/os;../sdk/src/BSP;../sdk/src/FWlib;../sdk/src/StartUP/ing916;../sdk/src/Tools;../sdk/src;.\src;..\..\lib</IncludePath>
+              <IncludePath>../sdk/bundles/extension/inc;../sdk/bundles/extension/inc/os;../sdk/src/BSP;../sdk/src/FWlib;../sdk/src/StartUP/ing916;../sdk/src/Tools;../sdk/src;.\src;..\..\lib;../../../../Program Files/ING_SDK/sdk/bundles/extension/inc;../../../../Program Files/ING_SDK/sdk/bundles/extension/inc/os;../../../../Program Files/ING_SDK/sdk/src/BSP;../../../../Program Files/ING_SDK/sdk/src/FWlib;../../../../Program Files/ING_SDK/sdk/src/StartUP/ing916;../../../../Program Files/ING_SDK/sdk/src/Tools;../../../../Program Files/ING_SDK/sdk/src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>

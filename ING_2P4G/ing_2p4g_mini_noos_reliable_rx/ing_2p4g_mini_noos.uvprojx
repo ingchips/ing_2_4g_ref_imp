@@ -340,7 +340,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine></Undefine>
-              <IncludePath>../sdk/bundles/noos_mini/inc;../sdk/bundles/noos_mini/inc/os;../sdk/src/BSP;../sdk/src/FWlib;../sdk/src/StartUP/ing916;../sdk/src/Tools;../sdk/src;..\2P4G_lib</IncludePath>
+              <IncludePath>../sdk/bundles/noos_mini/inc;../sdk/bundles/noos_mini/inc/os;../sdk/src/BSP;../sdk/src/FWlib;../sdk/src/StartUP/ing916;../sdk/src/Tools;../sdk/src;..\..\lib</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -557,7 +557,7 @@
             <File>
               <FileName>BLE_2P4G_Switch.lib</FileName>
               <FileType>4</FileType>
-              <FilePath>..\2P4G_lib\BLE_2P4G_Switch.lib</FilePath>
+              <FilePath>..\..\lib\BLE_2P4G_Switch.lib</FilePath>
             </File>
             <File>
               <FileName>app_24g.c</FileName>

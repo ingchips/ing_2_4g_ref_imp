@@ -348,7 +348,7 @@
               <MiscControls>--gnu</MiscControls>
               <Define>USE_STDPERIPH_DRIVER</Define>
               <Undefine/>
-              <IncludePath>D:/ING_SDK/sdk/bundles/extension/inc;D:/ING_SDK/sdk/bundles/extension/inc/os;D:/ING_SDK/sdk/src/BSP;D:/ING_SDK/sdk/src/FWlib;D:/ING_SDK/sdk/src/StartUP/ing916;D:/ING_SDK/sdk/src/Tools;D:/ING_SDK/sdk/src</IncludePath>
+              <IncludePath>../../../../Program Files/ING_SDK/sdk/bundles/extension/inc;../../../../Program Files/ING_SDK/sdk/bundles/extension/inc/os;../../../../Program Files/ING_SDK/sdk/src/BSP;../../../../Program Files/ING_SDK/sdk/src/FWlib;../../../../Program Files/ING_SDK/sdk/src/StartUP/ing916;../../../../Program Files/ING_SDK/sdk/src/Tools;../../../../Program Files/ING_SDK/sdk/src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
