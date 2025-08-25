@@ -42,7 +42,7 @@
  "key_incode": true,
  "series": "ING9168xx",
  "proj_name": "ING_BLE_2P4G_example",
- "sdk_release_path": "..\/..\/..\/..\/Program Files\/ING_SDK\/sdk",
+ "sdk_release_path": "..\/sdk",
  "printf_port": "uart0",
  "security": false,
  "legacy_adv": true,
