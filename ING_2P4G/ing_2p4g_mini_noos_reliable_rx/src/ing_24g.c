@@ -100,18 +100,11 @@ static ing24g_packet_ele_t* ing24g_packet_fifo_get(void)
     return &packet_fifo.packet[packet_fifo.head];
 }
 
-static uint8_t last_data = 0;
-
 static void ing24g_packet_fifo_del(void)
 {
     if (packet_fifo.head == packet_fifo.tail)
     {
         ing24g_printf("[ing24g_packet_fifo_del] : FIFO is empty!\n");
-        return;
-    }
-    if(last_data != packet_fifo.packet[packet_fifo.head].data[1])
-    {
-        ing24g_printf("last_data : %d, cur_data : %d\n", last_data, packet_fifo.packet[packet_fifo.head].data[1]);
         return;
     }
     packet_fifo.head = (packet_fifo.head + 1) % PACKET_FIFO_SIZE;
@@ -335,14 +328,9 @@ static void rx_ack_data_handle(ING2P4G_RxPacket *rx_packet)
             }
             else
             {
-               ing24g_printf("[2G4]recv repetition pac\n");
-
+//               ing24g_printf("[2G4]recv repetition pac\n");
             }
 
-            if(packet_fifo.ready_send == 1)
-            {
-                packet_fifo.is_send = 1; // 发送缓冲区的数据在这一周期发送出去，设置标记，等待下一周期删除
-            }
             header_nesn = !((rx_packet->Data[0] >> PACKET_HEADER_SN_BIT_POS) & 0x01); // 将接收到包文的 SN 取反，作为自己下一个包的 NESN
             header_sn = (rx_packet->Data[0] >> PACKET_HEADER_NESN_BIT_POS) & 0x01; // 将接收到包文的 NESN，作为自己下一个包的 SN
 		} break;
@@ -352,7 +340,7 @@ static void rx_ack_data_handle(ING2P4G_RxPacket *rx_packet)
     }
 }
 
-static void rx_noack_data_handle(ING2P4G_RxPacket *rx_packet)
+static void rx_noack_data_handle(ING2P4G_RxPacket *rx_packet, ing2p4g_status_t status)
 {
     switch(ing24g_obs.state) {
 		case ING24G_STATE_IDLE: {
@@ -363,7 +351,7 @@ static void rx_noack_data_handle(ING2P4G_RxPacket *rx_packet)
 		case ING24G_STATE_COMMNUICATING:{
 			ing24g_hop.error_cnt++;
             packet_fifo.is_send = 0; // Reset the send flag since no ACK was received
-            if(ing24g_hop.error_cnt > ING24G_HOP_BEGIN_CNT)
+            if(ing24g_hop.error_cnt > ING24G_HOP_BEGIN_CNT || status == ING2P4G_TIMEOUT_ERR) // 超时错误直接跳频，CRC 错误大于 ING24G_HOP_BEGIN_CNT 开始跳频
             {
                 ing24g_hop.error_cnt = 0;
                 ing24g_channel_hop_begin();
@@ -402,7 +390,12 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
 	}
     else
     {
-        rx_noack_data_handle(&RxPkt111);
+        rx_noack_data_handle(&RxPkt111, status);
+    }
+	
+    if(packet_fifo.ready_send == 1 && status != ING2P4G_TIMEOUT_ERR) // 除了 timeout 错误，其他错误都认为上一周期准备好的包文已发出去
+    {
+        packet_fifo.is_send = 1; // 发送缓冲区的数据在这一周期发送出去，设置标记，等待下一周期删除
     }
 
     ing24g_packet_ele_t *packed = ing24g_packet_fifo_get();
@@ -410,7 +403,6 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     {
         ing24g_raw_send_data(packed->data, packed->len); // 这里将FIFO的数据填包，不是立刻发送，而是下一个周期才会发送出去
         packet_fifo.ready_send = 1; // 代表数据已经填充到发送缓冲区，等待下一个周期发送
-        last_data = packed->data[1];
     }
     else
     {

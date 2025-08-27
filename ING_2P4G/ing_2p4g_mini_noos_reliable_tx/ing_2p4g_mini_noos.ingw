@@ -42,7 +42,7 @@
  "key_incode": true,
  "series": "ING9168xx",
  "proj_name": "ing_2p4g_mini_noos",
- "sdk_release_path": "..\/..\/..\/..\/sdk",
+ "sdk_release_path": "..\/sdk",
  "printf_port": "uart0",
  "security": false,
  "legacy_adv": true,
