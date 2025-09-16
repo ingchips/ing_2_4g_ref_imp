@@ -9,6 +9,8 @@ static void app_2g4_event_handle(uint8_t event, uint8_t *data, uint8_t len)
     static uint8_t last_data = 0;
     switch (event) {
 		case ING24G_EVENT_CONNECTED: {
+            recv_cnt = 0;
+            expect_idx = 0;
             platform_printf("ING24G_EVENT_CONNECTED\n");
         } break;
         case ING24G_EVENT_DISCONNECT: {

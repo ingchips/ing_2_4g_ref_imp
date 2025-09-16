@@ -393,7 +393,7 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
         rx_noack_data_handle(&RxPkt111, status);
     }
 	
-    if(packet_fifo.ready_send == 1 && status != ING2P4G_TIMEOUT_ERR) // 除了 timeout 错误，其他错误都认为上一周期准备好的包文已发出去
+    if(packet_fifo.ready_send == 1)
     {
         packet_fifo.is_send = 1; // 发送缓冲区的数据在这一周期发送出去，设置标记，等待下一周期删除
     }
