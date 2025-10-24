@@ -4,11 +4,11 @@
   "var": {
    "link_layer_features": {
     "value": "bf79ff07fe000000",
-    "addr": 33720648
+    "addr": 33721440
    }
   },
   "rom": {
-   "size": 166264,
+   "size": 167056,
    "base": 33562624
   },
   "ram": {
@@ -19,12 +19,12 @@
    "base": 33730560
   },
   "version": [
-   2,3,28]
+   2,3,56]
  },
- "tc_dir": "D:\/Keil_V5.36\/uv4",
+ "tc_dir": "D:\/Program Files\/MDK5\/uv4",
  "eflash_addr": "0x42000",
  "ide_ver": "5",
- "ide_exe": "D:\/Keil_V5.36\/uv4\/uv4.exe",
+ "ide_exe": "D:\/Program Files\/MDK5\/uv4\/uv4.exe",
  "use_uart_trace": false,
  "ota": false,
  "ide": "keil",
@@ -42,7 +42,7 @@
  "key_incode": true,
  "series": "ING9168xx",
  "proj_name": "ING_BLE_2P4G_example",
- "sdk_release_path": "D:\/ING_SDK\/sdk",
+ "sdk_release_path": "..\/sdk",
  "printf_port": "uart0",
  "security": false,
  "legacy_adv": true,
@@ -55,7 +55,7 @@
  "is_sdk_path_rel": true,
  "pb_gatt": true,
  "deep_sleep": false,
- "proj_dir": "F:\\0-GitHub\\001-ING_BLE_2G4_Switch-sdk-update\\ING_2P4G\\ING_BLE_2P4G_example",
+ "proj_dir": "D:\\ING_GIT\\ing_2_4g_ref_imp\\ING_2P4G\\ING_BLE_2P4G_example",
  "heap_size": 0,
  "power_saving": false,
  "secondary": false,

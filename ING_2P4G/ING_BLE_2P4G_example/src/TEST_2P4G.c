@@ -31,7 +31,7 @@ void gpio_pluse_num(uint16_t num)
 }
 void ing_2p4g_config_init(void)
 {
-    ing_2p4g_config.Mode          = MODE_SLAVE;
+    ing_2p4g_config.Mode          = MODE_MASTER;
     ing_2p4g_config.AccAddr       = 0x3234567A;
     ing_2p4g_config.PHY           = LLE_PHY_1M;
     ing_2p4g_config.Channel       = 2391;
@@ -169,6 +169,31 @@ static void percent_cnt(uint16_t T_CNT, ing2p4g_status_t status, int8_t rssi)
     }
 }
 
+static void percent_cnt2(ing2p4g_status_t status, int8_t rssi)
+{
+    static uint16_t test_cnt = 0;
+    static uint16_t ack_cnt = 0;
+    static uint16_t miss_cnt = 0;
+    static uint32_t tick_start;
+
+    test_cnt++;
+    if(status == ING2P4G_SUCCESS){
+        ack_cnt++;
+    }else{
+        miss_cnt++;
+    }
+
+    if(platform_get_us_time() - tick_start >= 1000000)
+    {
+        //platform_printf("tick_interval:%d us\n", (tick_end - tick_start));
+        platform_printf("1 sec recv: miss: %d,rev: %d, rssi:%d\r\n", miss_cnt, ack_cnt, rssi);
+        ack_cnt = 0;
+        miss_cnt = 0;
+        test_cnt = 0;
+        tick_start = platform_get_us_time();
+    }
+}
+
 ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
 {
     static ing2p4g_work_mode_t mode;
@@ -183,7 +208,8 @@ ADDITIONAL_ATTRIBUTE static void EventIrqCallBack(void)
     {
         if(mode == MODE_MASTER)
         {
-            percent_cnt(1000, status, RxPkt111.RSSI);
+//            percent_cnt(1000, status, RxPkt111.RSSI);
+			percent_cnt2(status, RxPkt111.RSSI);
             ing2p4g_start_2p4g_tx(master_tx_len, tx_data);
         }
         else
