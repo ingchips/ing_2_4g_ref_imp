@@ -8,28 +8,27 @@
 
 目前支持的所有指令如下：
 
-| 串口指令 | 接口                      | 说明                                                         |
-| -------- | ------------------------- | ------------------------------------------------------------ |
-| h        | cmd_help                  | 帮助指令，可以查看所有串口指令                               |
-| ?        | cmd_help                  | 帮助指令，可以查看所有串口指令                               |
-| ble      | cmd_switch_to_ble         | 切换到BLE模式                                                |
-| 2g4      | cmd_switch_to_2g4         | 切换到2.4G模式                                               |
-| state    | cmd_get_2g4_state         | 查看当前的2.4G工作状态，包括三种：ING2P4G_STATE_IDLE，ING2P4G_STATE_TX，ING2P4G_STATE_RX |
-| phy      | cmd_phy_set               | 设置2.4G的phy                                                |
-| aa       | cmd_access_address_set    | 设置2.4G的access address                                     |
-| power    | cmd_power_set             | 设置2.4G的发射功率                                           |
-| channel  | cmd_channel_set           | 设置2.4G的工作频道                                           |
-| timeout  | cmd_rx_timeout_set        | 设置2.4G接收状态下的超时时间                                 |
-| txone    | cmd_tx_one_packet         | 在2.4G模式下发送一包数据                                     |
-| txcon    | cmd_tx_continus           | 在2.4G模式下连续发送数据                                     |
-| rxone    | cmd_rx_one_packet         | 在2.4G模式下接收一包数据                                     |
-| rxcon    | cmd_rx_continus           | 在2.4G模式下连续接收数据                                     |
-| stopcon  | cmd_stop_continus         | 结束连续发送/接收                                            |
-| rxdata   | cmd_rx_data_get           | 获取SLAVE上一包收到的数据                                    |
-| rxint    | cmd_rx_interrupt_clear    | 清rx中断                                                     |
-| eventint | cmd_event_interrupt_clear | 清event中断                                                  |
-| test     | cmd_test_inst             | 测试指令，开发者可以根据需求增加自己的指令                   |
-| shutdown | cmd_shutdown              | 设备进入低功耗模式（只能通过配置好的IO唤醒）                 |
+| 串口指令 | 接口                   | 说明                                                         |
+| -------- | ---------------------- | ------------------------------------------------------------ |
+| h        | cmd_help               | 帮助指令，可以查看所有串口指令                               |
+| ?        | cmd_help               | 帮助指令，可以查看所有串口指令                               |
+| ble      | cmd_switch_to_ble      | 切换到BLE模式                                                |
+| 2g4      | cmd_switch_to_2g4      | 切换到2.4G模式                                               |
+| state    | cmd_get_2g4_state      | 查看当前的2.4G工作状态，包括三种：ING2P4G_STATE_IDLE，ING2P4G_STATE_TX，ING2P4G_STATE_RX |
+| phy      | cmd_phy_set            | 设置2.4G的phy                                                |
+| aa       | cmd_access_address_set | 设置2.4G的access address                                     |
+| power    | cmd_power_set          | 设置2.4G的发射功率                                           |
+| channel  | cmd_channel_set        | 设置2.4G的工作频道                                           |
+| timeout  | cmd_rx_timeout_set     | 设置2.4G接收状态下的超时时间                                 |
+| txone    | cmd_tx_one_packet      | 在2.4G模式下发送一包数据                                     |
+| txcon    | cmd_tx_continus        | 在2.4G模式下连续发送数据                                     |
+| rxone    | cmd_rx_one_packet      | 在2.4G模式下接收一包数据                                     |
+| rxcon    | cmd_rx_continus        | 在2.4G模式下连续接收数据                                     |
+| stopcon  | cmd_stop_continus      | 结束连续发送/接收                                            |
+| rxdata   | cmd_rx_data_get        | 获取SLAVE上一包收到的数据                                    |
+| test1    | cmd_test_inst1         | 通用测试指令1                                                |
+| test2    | cmd_test_inst2         | 通用测试指令2                                                |
+| shutdown | cmd_shutdown           | 设备进入低功耗模式（只能通过配置好的IO唤醒）                 |
 
 # 二 使用说明
 
